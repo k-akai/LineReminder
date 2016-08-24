@@ -24,17 +24,35 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/',function(req, res){
-	//res.send('<?xml version=\'1.0\' encoding=\'UTF-8\'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns2:dataRS xmlns:ns2="http://soap.fiap.org/"><transport xmlns="http://gutp.jp/fiap/2009/11/"><header><OK /></header></transport></ns2:dataRS></soapenv:Body></soapenv:Envelope>')
-	
+	var data="";
+	req.on('readable',function(chunk){
+		
+		console.log(a);
+		console.log("\n");
+		data+=req.read();
+	});
+	req.on('end',function(){
+		console.log(data);
+		xml=makexml();
+		console.log("AAA");
+		console.log(xml);
+		res.send(xml);
+	});
+	/*
+	//解析
+	console.log(req.body());
+
+	//生成
 	xml=makexml();
 	console.log(xml);
 	res.send(xml);
+	*/
 
-	//res.send(dom)
 
 });
 
-
+	//res.send('<?xml version=\'1.0\' encoding=\'UTF-8\'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns2:dataRS xmlns:ns2="http://soap.fiap.org/"><transport xmlns="http://gutp.jp/fiap/2009/11/"><header><OK /></header></transport></ns2:dataRS></soapenv:Body></soapenv:Envelope>')
+	
 
 
 module.exports = router;
