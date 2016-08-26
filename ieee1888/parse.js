@@ -20,23 +20,75 @@ function deleteSpace(data){
 
 exports.parseWrite=function(data){
 	//xml2jsがns使えないのでparse前にnamespaceを取る
-	console.log(data)
+	//console.log(data)
 	data=deleteNS(data)
-
+		
 	//jsonに変換
 	var json = JSON.parse(parser.toJson(data));
 	pointlist=json["Envelope"]["Body"]["dataRQ"]["transport"]["body"]["point"];
+	
+	var retList=[];
+
+	//console.log(pointlist);
 	for(var i in pointlist){
-		console.log("point="+pointlist[i]["id"]);
-		point =	pointlist[i]["id"];
+		valuelist=[];
+
+		//もう少し改善方法を考えてみる
+		
+		/*
+		var val2=pointlist[i];
+
+		console.log(val2);
+		array=[1];
+		if (Array.isArray(val2)==false){
+			array[0]=val2;
+		}else{
+			array=val2;
+		}
+					
+		if (Array.isArray(array)==false){
+			console.log("???");
+		}else{
+			console.log("length="+array.length);
+		}
+		console.log("---");
+		console.log(array[0]);
+		*/
+		
+		if (!(pointlist[i]["value"].length >=1)){
+			console.log("aa")
+			var time=null;
+			var val=null;
+			value= pointlist[i]["value"]
+			if(value["time"]!=undefined){
+				time=value["time"];
+			}
+			if(value["$t"]!=undefined){
+				val=value["$t"];
+			}
+			valuelist.push([time,val]);
+			retList.push([pointlist[i]["id"],valuelist]);
+			continue;
+		}
+		
 		for(var j in pointlist[i]["value"]){
 			value= pointlist[i]["value"][j];
-			console.log("time="+value["time"]);
-			console.log("value="+value["$t"]);
+			var time=null;
+			var val=null;
+			if(value["time"]!=undefined){
+				time=value["time"];
+			}
+			if(value["$t"]!=undefined){
+				val=value["$t"];
+			}
+			valuelist.push([time,val]);
 		}
+		retList.push([pointlist[i]["id"],valuelist]);
 	}
-	
-	return "al";
+	for (var i in retList){
+		console.log(retList[i]);
+	}
+	return retList;
 }
 
 //writeに対するok(暫定)

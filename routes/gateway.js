@@ -21,9 +21,11 @@ router.post('/',function(req, res){
 		//writeなら
 		if(req.headers['soapaction']=='"http://soap.fiap.org/data"'){
 			//解析
-			ieee1888.parseWrite(data);
+			var list=ieee1888.parseWrite(data);
+			
+			//console.log(list);
 			//暫定OKを返す
-			xml=ieee1888.makeOk();
+			var xml=ieee1888.makeOk();
 	
 			res.send(xml);
 		}else{
