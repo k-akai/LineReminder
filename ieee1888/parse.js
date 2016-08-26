@@ -36,7 +36,7 @@ exports.parseWrite=function(data){
 		}
 	}
 	
-	return "a";
+	return "al";
 }
 
 //writeに対するok(暫定)

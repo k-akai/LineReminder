@@ -25,17 +25,12 @@ exports.parseWrite=function(data){
 
 	//jsonに変換
 	var json = JSON.parse(parser.toJson(data));
-	
 	pointlist=json["Envelope"]["Body"]["dataRQ"]["transport"]["body"]["point"];
-
 	for(var i in pointlist){
-
 		console.log("point="+pointlist[i]["id"]);
 		point =	pointlist[i]["id"];
-
 		for(var j in pointlist[i]["value"]){
 			value= pointlist[i]["value"][j];
-
 			console.log("time="+value["time"]);
 			console.log("value="+value["$t"]);
 		}
