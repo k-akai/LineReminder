@@ -33,46 +33,18 @@ exports.parseWrite=function(data){
 	for(var i in pointlist){
 		valuelist=[];
 
-		//もう少し改善方法を考えてみる
-		
-		/*
-		var val2=pointlist[i];
-
-		console.log(val2);
-		array=[1];
+		//複数ある場合と１つしかない場合で挙動が違うため
+		var val2=pointlist[i]["value"];
+		array=null;
 		if (Array.isArray(val2)==false){
+			array=[1];
 			array[0]=val2;
 		}else{
 			array=val2;
 		}
-					
-		if (Array.isArray(array)==false){
-			console.log("???");
-		}else{
-			console.log("length="+array.length);
-		}
-		console.log("---");
-		console.log(array[0]);
-		*/
-		
-		if (!(pointlist[i]["value"].length >=1)){
-			console.log("aa")
-			var time=null;
-			var val=null;
-			value= pointlist[i]["value"]
-			if(value["time"]!=undefined){
-				time=value["time"];
-			}
-			if(value["$t"]!=undefined){
-				val=value["$t"];
-			}
-			valuelist.push([time,val]);
-			retList.push([pointlist[i]["id"],valuelist]);
-			continue;
-		}
-		
-		for(var j in pointlist[i]["value"]){
-			value= pointlist[i]["value"][j];
+
+		for(var j in array){
+			value= array[j];
 			var time=null;
 			var val=null;
 			if(value["time"]!=undefined){

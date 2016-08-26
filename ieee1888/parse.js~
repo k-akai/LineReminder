@@ -34,26 +34,20 @@ exports.parseWrite=function(data){
 		valuelist=[];
 
 		//もう少し改善方法を考えてみる
-		/*
-		var val2=pointlist[i];
-
-		console.log(val2);
-		array=[1];
+		
+		var val2=pointlist[i]["value"];
+		array=null;
 		if (Array.isArray(val2)==false){
+			array=[1];
 			array[0]=val2;
 		}else{
 			array=val2;
 		}
-					
-		if (Array.isArray(array)==false){
-			console.log("???");
-		}else{
-			console.log("length="+array.length);
-		}
-		console.log("---");
-		console.log(array[0]);
-		*/
+
+		//console.log("---");
+		//console.log(array[0]);
 		
+		/*
 		if (!(pointlist[i]["value"].length >=1)){
 			console.log("aa")
 			var time=null;
@@ -69,9 +63,10 @@ exports.parseWrite=function(data){
 			retList.push([pointlist[i]["id"],valuelist]);
 			continue;
 		}
-		
-		for(var j in pointlist[i]["value"]){
-			value= pointlist[i]["value"][j];
+		*/
+
+		for(var j in array/*pointlist[i]["value"]*/){
+			value= array[j]/*pointlist[i]["value"][j]*/;
 			var time=null;
 			var val=null;
 			if(value["time"]!=undefined){
