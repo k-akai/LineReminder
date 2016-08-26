@@ -1,43 +1,50 @@
 var xml2js  = require('xml2js');
 var parser = require('xml2json');
-//xml2jsがns使えないのでparse前にnamespaceを取る
+
+
+//xml2jsがns使えないのでparse前にnamespaceを取るメソッド
 function deleteNS(data){
 	//var regExp=RegExp(/:/g)
-	data=data.replace(/<[a-zA-Z0-9]*:/g,"<")
-	data=data.replace(/<\/[a-zA-Z0-9]*:/g,"<\/")
-	data=data.replace(/null/g,"")
+	data=data.replace(/<[a-zA-Z0-9]*:/g,"<");
+	data=data.replace(/<\/[a-zA-Z0-9]*:/g,"<\/");
+	data=data.replace(/<\/Envelope>null/g,"<\/Envelope>");
 	return data
 }
 
+//xmlj2sで作ったxmlがエラーを吐くので修正してみる
+function deleteSpace(data){
+	data=data.replace(/[\n\r]/g,"");
+	data=data.replace(/\s\s+/g,"");
+	return data;
+}
+
 exports.parseWrite=function(data){
-
-	data=deleteNS(data)
+	//xml2jsがns使えないのでparse前にnamespaceを取る
 	console.log(data)
-	var json = parser.toJson(data);
-	console.log(json);
-	/*
-	var parseString=xml2js.parseString;
+	data=deleteNS(data)
 
-	//var data = "<root>Hello xml2js!</root>"
-	parseString(data,function(err, result){
-		if(err) {
-			console.log(err);
-		} else {
-			//console.log(result);
-			//console.log(result['Envelope']);
-			console.log(result);
-			console.log(result['Envelope']);
-			dataRQ=result['Envelope']['Body'];
-			//bo=dataRQ'dataRQ';
-			//console.log(bo);
-			//console.log(result.root.hoge1[0]);		// 配列になってる
-			//console.log(result.root.hoge2[0]);		// 配列になってる
+	//jsonに変換
+	var json = JSON.parse(parser.toJson(data));
+	
+	pointlist=json["Envelope"]["Body"]["dataRQ"]["transport"]["body"]["point"];
+
+	for(var i in pointlist){
+
+		console.log("point="+pointlist[i]["id"]);
+		point =	pointlist[i]["id"];
+
+		for(var j in pointlist[i]["value"]){
+			value= pointlist[i]["value"][j];
+
+			console.log("time="+value["time"]);
+			console.log("value="+value["$t"]);
 		}
-	});
-	*/
+	}
+	
 	return "a";
 }
 
+//writeに対するok(暫定)
 exports.makeOk=function(){
 	
 	var builder = new xml2js.Builder({ rootName : 'soapenv:Envelope'});
@@ -48,8 +55,8 @@ exports.makeOk=function(){
 	var body={"ns2:dataRS":dataRS};
 	var root = {"soapenv:Body":body,$:{"xmlns:soapenv":"http://schemas.xmlsoap.org/soap/envelope/"}};
 	var xml = builder.buildObject(root);
-	return xml.toString();
-
+	var str=deleteSpace(xml.toString());
+	return str;
 }
-	//res.send('<?xml version=\'1.0\' encoding=\'UTF-8\'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns2:dataRS xmlns:ns2="http://soap.fiap.org/"><transport xmlns="http://gutp.jp/fiap/2009/11/"><header><OK /></header></transport></ns2:dataRS></soapenv:Body></soapenv:Envelope>')
+
 

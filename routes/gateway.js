@@ -17,21 +17,19 @@ router.post('/',function(req, res){
 	});
 
 	req.on('end',function(){
-		//console.log(data);
-		ieee1888.parseWrite(data);
-		//xml=ieee1888make.parseWrite(data);
 
-		xml=ieee1888.makeOk();
-		console.log(xml);
-		res.send(xml);
-
-	});
-
-
-});
-
-
+		//writeなら
+		if(req.headers['soapaction']=='"http://soap.fiap.org/data"'){
+			//解析
+			ieee1888.parseWrite(data);
+			//暫定OKを返す
+			xml=ieee1888.makeOk();
 	
-
+			res.send(xml);
+		}else{
+			console.log("未実装");
+		}
+	});
+});
 
 module.exports = router;
