@@ -18,52 +18,6 @@ function deleteSpace(data){
 	return data;
 }
 
-exports.parseWrite2=function(data){
-	//xml2jsがns使えないのでparse前にnamespaceを取る
-	//console.log(data)
-	data=deleteNS(data)
-		
-	//jsonに変換
-	var json = JSON.parse(parser.toJson(data));
-	pointlist=json["Envelope"]["Body"]["dataRQ"]["transport"]["body"]["point"];
-	
-	var retList=[];
-
-	//console.log(pointlist);
-	for(var i in pointlist){
-		valuelist=[];
-
-		//複数ある場合と１つしかない場合で挙動が違うため
-		var val2=pointlist[i]["value"];
-		array=null;
-		if (Array.isArray(val2)==false){
-			array=[1];
-			array[0]=val2;
-		}else{
-			array=val2;
-		}
-
-		for(var j in array){
-			value= array[j];
-			var time=null;
-			var val=null;
-			if(value["time"]!=undefined){
-				time=value["time"];
-			}
-			if(value["$t"]!=undefined){
-				val=value["$t"];
-			}
-			valuelist.push([time,val]);
-		}
-		retList.push([pointlist[i]["id"],valuelist]);
-	}
-	for (var i in retList){
-		console.log(retList[i]);
-	}
-	return retList;
-}
-
-
 exports.parseWrite=function(data){
 	//xml2jsがns使えないのでparse前にnamespaceを取る
 	//console.log(data)
@@ -72,9 +26,9 @@ exports.parseWrite=function(data){
 	//jsonに変換
 	var json = JSON.parse(parser.toJson(data));
 	point=json["Envelope"]["Body"]["dataRQ"]["transport"]["body"]["point"];
+	//pointが１つかどうか、
 	if(point["id"]==undefined){
 		for(var i in point){
-
 			checkPoint(point[i]);
 		}
 	}else{
@@ -83,6 +37,7 @@ exports.parseWrite=function(data){
 	return "aa";
 }
 
+//parseWriteから呼ばれる関数
 function checkPoint(point){
 
 	//pointに対して、valueが１つ、かつ、timeがない場合
@@ -93,8 +48,7 @@ function checkPoint(point){
 		//valueがひとつしかないのか、複数あるのか。ちなみにvalueが複数ある場合はtimeが必須という前提
 		if(point["value"]["time"]==undefined){	
 			for (var x in point["value"]){
-					checkValue(point["id"],point["value"][x]["time"],point["value"][x]["$t"]);
-				
+					checkValue(point["id"],point["value"][x]["time"],point["value"][x]["$t"]);		
 			}
 		}else{
 			checkValue(point["id"],point["value"]["time"],point["value"]["$t"]);
@@ -102,6 +56,7 @@ function checkPoint(point){
 	}
 		
 }
+//parseWriteから呼ばれる関数
 function checkValue(point,time,val){
 	console.log("point="+point);
 	console.log("time="+time);
