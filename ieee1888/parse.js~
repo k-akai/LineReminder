@@ -1,7 +1,6 @@
 var xml2js  = require('xml2js');
 var parser = require('xml2json');
-
-
+var db = require('../storage/connection');
 //xml2jsがns使えないのでparse前にnamespaceを取るメソッド
 function deleteNS(data){
 	//var regExp=RegExp(/:/g)
@@ -34,6 +33,7 @@ exports.parseWrite=function(data){
 	}else{
 		checkPoint(point);
 	}
+	db.connect();
 	return "aa";
 }
 
