@@ -33,13 +33,7 @@ exports.parseWrite=function(data){
 	}else{
 		checkPoint(point);
 	}
-	doc = {
-		    "firstname" : "Taro",
-		    "familyname" : "Yamada",
-		    "age" : 42,
-		    "work" : ["professor", "writer", "TV Caster"]
-		};
-	db.write(doc);
+
 	return "aa";
 }
 
@@ -67,6 +61,23 @@ function checkValue(point,time,val){
 	console.log("point="+point);
 	console.log("time="+time);
 	console.log("val="+val);
+
+	//時間を変換する
+	date=null;
+	if (time==null){
+		date=new Date();
+	}else{
+		//解析する
+				
+		date=new Date(time);
+	}
+	console.log("new Date="+date);
+	doc = {
+		    "point" : point,
+		    "time" : date,
+		    "value" : val
+	};
+	db.write(doc);
 
 }
 

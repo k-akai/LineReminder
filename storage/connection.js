@@ -62,4 +62,53 @@ exports.read = function(){
 	});
 }
 
+exports.allRead=function(){
+	var cursor = collection.find();
+	arrays=[];
+	cursor.toArray(function(err, docs){
+		// toArray用のコールバック関数
+		if(err){
+			console.error('読み込みエラー');
+			throw(err);
+		}
+		arrays.push(docs);
+		console.log(docs);
+	});
+	return arrays;
+
+}
+
+/*
+exports.allRead2=function(){
+	var cursor = collection.find();
+	arrays=[];
+	
+	function check(){
+			cursor.toArray(function(err, docs){
+			// toArray用のコールバック関数
+			if(err){
+				console.error('読み込みエラー');
+				throw(err);
+			}
+			arrays.push(docs);
+			console.log(docs);
+		});
+	}
+
+	function onFulfilled(data) {
+		  console.log(data);
+		  return Promise.resolve(data);
+	}
+	var promise = new Promise(check);
+	promise.then(return arrays;
+	);
+	
+//	return arrays;
+
+}
+*/
+
+exports.clear=function(){
+	
+}
 

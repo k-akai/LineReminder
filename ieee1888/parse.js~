@@ -33,7 +33,7 @@ exports.parseWrite=function(data){
 	}else{
 		checkPoint(point);
 	}
-	db.connect();
+
 	return "aa";
 }
 
@@ -61,6 +61,13 @@ function checkValue(point,time,val){
 	console.log("point="+point);
 	console.log("time="+time);
 	console.log("val="+val);
+
+	doc = {
+		    "point" : point,
+		    "time" : time,
+		    "value" : val
+	};
+	db.write(doc);
 
 }
 
