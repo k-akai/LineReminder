@@ -2,6 +2,10 @@ var express = require('express');
 var router = express.Router();
 var db = require('../storage/connection');
 
+
+//var ejs = require('ejs');
+
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
 	
@@ -12,7 +16,12 @@ router.get('/', function(req, res, next) {
 		data=db.allRead();
 		console.log("data");
 		console.log(data);
-		res.send(data);	
+		//res.send(data);
+
+		 res.render('test.html', { 
+				title:"タイトルです",
+			        content:"これはサンプルで作成したテンプレートです。",
+		});	
 	}
 	
 });

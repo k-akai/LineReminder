@@ -1,4 +1,6 @@
 var mongo = require('mongodb');
+var co  = require('co');
+
 //console.log("DB connection start");
 var dbname=(process.env.DBNAME);
 var host=(process.env.DBHOST);
@@ -63,8 +65,71 @@ exports.read = function(){
 }
 
 exports.allRead=function(){
+	
+	var cursor = collection.find();
+	arrays=null;
+	
+	cursor.toArray(function(err, docs){
+		arrays=[];
+		// toArray用のコールバック関数
+		if(err){
+			
+			console.error('読み込みエラー');
+			throw(err);
+		}
+		arrays.push(docs);
+		console.log(docs);
+	});
+	/*
+	while(arrays==null){
+		console.log("wait");
+		//setTimeout(function(){}, 10);
+	}
+	*/
+	return arrays;
+	/*
+	array=null;
+	co( function *(){
+		arrays=yield readTest();		
+	})
+	console.log("check");
+	return array;
+	*/
+}
+
+//作ったけど現状使わないので放置
+/*
+exports.allRead2=function(){
+	var array=[];
+	readTestx(array).then(function() {
+  		console.log("finish");
+	});
+	return array;
+}
+*/
+
+
+function readTestx(arrays){
+	return new Promise(function(){
+		var cursor = collection.find();
+		//arrays=[];
+	
+		cursor.toArray(function(err, docs){
+			// toArray用のコールバック関数
+			if(err){
+				console.error('読み込みエラー');
+				throw(err);
+			}
+			arrays.push(docs);
+			console.log(docs);
+		});
+	});
+}	
+
+function readTest(){
 	var cursor = collection.find();
 	arrays=[];
+	
 	cursor.toArray(function(err, docs){
 		// toArray用のコールバック関数
 		if(err){
@@ -77,6 +142,10 @@ exports.allRead=function(){
 	return arrays;
 
 }
+
+
+
+
 
 /*
 exports.allRead2=function(){
