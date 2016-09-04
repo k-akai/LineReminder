@@ -10,7 +10,7 @@ var db = require('../storage/connection');
 router.get('/', function(req, res, next) {
 	
 	if(req.query.set=="clear"){
-		console.log("clear-db");
+		console.log("clear-db making");
 		res.send('respond with a resource');
 	}else if(req.query.set=="check"){
 		data=db.allRead();

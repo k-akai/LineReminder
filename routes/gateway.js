@@ -28,6 +28,16 @@ router.post('/',function(req, res){
 			var xml=ieee1888.makeOk();
 	
 			res.send(xml);
+		//fetchなら
+		}else if(req.headers['soapaction']=='"http://soap.fiap.org/query"'){
+			//解析
+			//responselist
+			responselist=[];
+			ieee1888.parseFetch(data);
+			//var list=ieee1888.parseFetch(data,responselist);
+			var xml=ieee1888.makeFetchResonse();
+
+			res.send(xml);
 		}else{
 			console.log("未実装");
 		}

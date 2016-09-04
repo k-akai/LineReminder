@@ -13,6 +13,8 @@ var pass=(process.env.DBPASS);
 db = new mongo.Db(dbname, new mongo.Server(host, parseInt(port)/*mongo.Connection.DEFAULT_PORT*/, {}),{safe:true});
 var collection;
 
+
+
 db.open(function(err, db){
 	if(err){
 		console.error('DB接続エラー');
@@ -33,7 +35,12 @@ db.open(function(err, db){
 	}
 	// 接続完了後にコレクション取得
 	collection = db.collection("ieee1888");
+
+	//export:test
+	exports.col=collection;
+
 });
+
 
 
 // 書き込み用メソッド
@@ -80,21 +87,9 @@ exports.allRead=function(){
 		arrays.push(docs);
 		console.log(docs);
 	});
-	/*
-	while(arrays==null){
-		console.log("wait");
-		//setTimeout(function(){}, 10);
-	}
-	*/
+
 	return arrays;
-	/*
-	array=null;
-	co( function *(){
-		arrays=yield readTest();		
-	})
-	console.log("check");
-	return array;
-	*/
+
 }
 
 //作ったけど現状使わないので放置
@@ -106,7 +101,7 @@ exports.allRead2=function(){
 	});
 	return array;
 }
-*/
+
 
 
 function readTestx(arrays){
@@ -125,7 +120,7 @@ function readTestx(arrays){
 		});
 	});
 }	
-
+*/
 function readTest(){
 	var cursor = collection.find();
 	arrays=[];
@@ -147,35 +142,7 @@ function readTest(){
 
 
 
-/*
-exports.allRead2=function(){
-	var cursor = collection.find();
-	arrays=[];
-	
-	function check(){
-			cursor.toArray(function(err, docs){
-			// toArray用のコールバック関数
-			if(err){
-				console.error('読み込みエラー');
-				throw(err);
-			}
-			arrays.push(docs);
-			console.log(docs);
-		});
-	}
 
-	function onFulfilled(data) {
-		  console.log(data);
-		  return Promise.resolve(data);
-	}
-	var promise = new Promise(check);
-	promise.then(return arrays;
-	);
-	
-//	return arrays;
-
-}
-*/
 
 exports.clear=function(){
 	
