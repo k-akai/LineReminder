@@ -9,6 +9,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var gateway= require('./routes/gateway');
 var dbconfig = require('./routes/dbconfig');
+var sockettest = require('./routes/sockettest');
 
 var app = express();
 
@@ -20,7 +21,6 @@ app.set('view engine', 'jade');
 
 app.engine('htm', require('ejs').renderFile);  　//  <--追加
 app.engine('html', require('ejs').renderFile);   //　<--追加
-
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -34,6 +34,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/gateway',gateway);
 app.use('/dbconfig',dbconfig);
+app.use('/socket',sockettest);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

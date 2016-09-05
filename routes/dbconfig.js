@@ -2,10 +2,6 @@ var express = require('express');
 var router = express.Router();
 var db = require('../storage/connection');
 
-
-//var ejs = require('ejs');
-
-
 /* GET users listing. */
 router.get('/', function(req, res, next) {
 	
