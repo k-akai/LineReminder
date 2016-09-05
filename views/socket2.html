@@ -1,18 +1,27 @@
-<!doctype html>
-<meta charset="utf-8">
-<title>chat</title>
+<!DOCTYPE html>
+<html lang="ja">
 <script src="/socket.io/socket.io.js"></script>
 <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+<head>
+<meta charset="utf-8">
+<title>chat</title>
+
+</head>
+<body>
 <form><input></form><div></div>
+</body>
 <script>
- var socket = io();
- $('form').submit(function () {
-   socket.emit('msg', $('input').val());
-   $('input').val('');
-   return false;
- });
- socket.on('msg', function (data) {
-   data = $('<div/>').text(data).html();
-   $('div').prepend(data + '<br>');
- });
+var socket = io();
+$('form').submit(function () {
+	socket.emit('msg', $('input').val());
+	$('input').val('');
+	return false;
+});
+socket.on('msg', function (data) {
+	data = $('<div/>').text(data).html();
+	$('div').prepend(data + '<br>');
+});
 </script>
+
+</html>
+

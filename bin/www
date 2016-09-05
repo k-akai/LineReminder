@@ -90,23 +90,18 @@ function onListening() {
 }
 
 
-
-
-
 var io = require('socket.io')(server);
 var webPort = process.env.PORT || 3000;
 server.listen(webPort);
-io.on(
-	'connection',
-	function (socket) {
+io.on('connection',function (socket) {
+		console.log("socket.on");
+
 		socket.on('msg',function (data) {
-                io.emit('msg', data);
-            }
-        );
-	socket.on('disconnect', function() {
-    		log('disconnected');
-		}
-	);
-    }
-);
+            		io.emit('msg', data);
+		});
+
+		socket.on('disconnect', function() {
+	    		console.log('disconnected');
+		});
+});
 
