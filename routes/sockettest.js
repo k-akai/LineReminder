@@ -6,7 +6,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
 	
 	
-	 res.render('socket.html', { 
+	 res.render('socket2.html', { 
 				title:"タイトルです",
 			        content:"これはサンプルで作成したテンプレートです。",
 	});	
