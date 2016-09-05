@@ -17,11 +17,12 @@ $('form').submit(function () {
 	$('input').val('');
 	return false;
 });
+
+
 socket.on('msg', function (data) {
-	data = $('<div/>').text(data).html();
+	//data = $('<div/>').text(data).html();
 	$('div').prepend(data + '<br>');
 });
 </script>
-
 </html>
 
