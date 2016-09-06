@@ -4,19 +4,27 @@
 <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
 <head>
 <meta charset="utf-8">
-<title>chat</title>
+<title><%=title%></title>
 
 </head>
-<body>
+<body onLoad="loadHello()">
 <form><input></form><div></div>
 </body>
 <script>
-var socket = io();
-$('form').submit(function () {
-	socket.emit('msg', $('input').val());
-	$('input').val('');
-	return false;
+//var socket = io();
+var socket=io.connect("<%=host%>");
+var socketid=null;
+jQuery(function($){
+	$('form').submit(function () {
+		socket.emit('msg', $('input').val());
+		$('input').val('');
+		return false;
+	});
 });
+function loadHello(){
+	socket.emit('connectcount', <%=id%>);	
+}
+
 
 
 socket.on('msg', function (data) {

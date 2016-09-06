@@ -93,15 +93,86 @@ function onListening() {
 var io = require('socket.io')(server);
 var webPort = process.env.PORT || 3000;
 server.listen(webPort);
-io.on('connection',function (socket) {
-		console.log("socket.on");
 
-		socket.on('msg',function (data) {
-            		io.emit('msg', data);
-		});
+ioexport={};
+socketlist=[];
+connectid=[];
+/*
+var dbsocket=io.of('/dbconfigsocket');
 
-		socket.on('disconnect', function() {
-	    		console.log('disconnected');
-		});
+dbsocket.on('connection',function (socket) {
+	//console.log(socket.id);
+	console.log(socket);
+	//特定用途のため、現状はプッシュしているだけ
+	socketlist.push(socket);
+	//console.log("socketcount:"+socketlist.length);
+
+	//テスト用
+	socket.on('msg',function (data) {
+    		io.emit('msg', data);
+	});
+
+	
+	socket.on('connectcount',function(data){
+		io.emit('socketid',socket.id);
+		//数字と、socketidをマッチさせておく
+		
+		//console.log(data);	
+	});
+
+	socket.on('disconnect', function() {
+		num=-1;
+		for(i in socketlist){
+			if(socketlist[i]===socket){
+				num=i;
+				break;	
+			}
+		}
+		socketlist.splice(num,1);
+		console.log("socketcount:"+socketlist.length);
+    		console.log('disconnected');
+	});
+		
 });
+
+*/
+io.on('connection',function (socket) {
+	//console.log(socket.id);
+	//console.log(socket);
+	//特定用途のため、現状はプッシュしているだけ
+	socketlist.push(socket);
+	//console.log("socketcount:"+socketlist.length);
+
+	//テスト用
+	socket.on('msg',function (data) {
+    		io.emit('msg', data);
+	});
+
+	
+	socket.on('connectcount',function(data){
+		io.emit('socketid',socket.id);
+		//数字と、socketidをマッチさせておく
+		
+		//console.log(data);	
+	});
+
+	socket.on('disconnect', function() {
+		num=-1;
+		for(i in socketlist){
+			if(socketlist[i]===socket){
+				num=i;
+				break;	
+			}
+		}
+		socketlist.splice(num,1);
+		console.log("socketcount:"+socketlist.length);
+    		console.log('disconnected');
+	});
+		
+});
+console.log("port"+process.env.PORT);
+console.log("ip");
+exports.socketlist=socketlist;
+exports.ioexport=io;
+
 
