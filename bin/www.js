@@ -97,6 +97,7 @@ server.listen(webPort);
 ioexport={};
 socketlist=[];
 connectid=[];
+console.log(webPort);
 /*
 var dbsocket=io.of('/dbconfigsocket');
 
@@ -141,7 +142,7 @@ io.on('connection',function (socket) {
 	//console.log(socket);
 	//特定用途のため、現状はプッシュしているだけ
 	socketlist.push(socket);
-	//console.log("socketcount:"+socketlist.length);
+	console.log("socketcount:"+socketlist.length);
 
 	//テスト用
 	socket.on('msg',function (data) {
@@ -170,9 +171,9 @@ io.on('connection',function (socket) {
 	});
 		
 });
-console.log("port"+process.env.PORT);
-console.log("ip");
+
 exports.socketlist=socketlist;
 exports.ioexport=io;
+exports.port=webPort;
 
 

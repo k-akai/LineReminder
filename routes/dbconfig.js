@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../storage/connection.js');
 var fetch = require('../storage/fetch.js');
+var www=require('../bin/www.js');
 
 /* GET users listing. */
 var id=0;
@@ -27,7 +28,7 @@ router.get('/', function(req, res, next) {
 	}else if(req.query.set=="checknow"){
 		data=fetch.allReadandPush();
 		id++;
-		host=process.env.HOSTNAME+":"+process.env.PORT;
+		host=process.env.HOSTNAME+":"+www.port;
 		res.render('db.html', { 
 				title:"タイトルです",
 				id:id,
