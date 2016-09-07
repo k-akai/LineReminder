@@ -7,7 +7,7 @@
 <title><%=title%></title>
 
 </head>
-<body onLoad="loadHello()">
+<body onLoad="load()">
 <form><input></form><div></div>
 </body>
 <script>
@@ -21,8 +21,9 @@ jQuery(function($){
 		return false;
 	});
 });
-function loadHello(){
-	socket.emit('connectcount', <%=id%>);	
+function load(){
+	socket.emit('connectcount', <%=id%>);
+
 }
 
 

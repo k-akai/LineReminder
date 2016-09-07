@@ -29,6 +29,9 @@ router.get('/', function(req, res, next) {
 		data=fetch.allReadandPush();
 		id++;
 		host=process.env.HOSTNAME+":"+www.port;
+		if (www.port!=3000){
+			host=process.env.HOSTNAME;
+		}	
 		res.render('db.html', { 
 				title:"タイトルです",
 				id:id,
