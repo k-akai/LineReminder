@@ -28,10 +28,12 @@ router.get('/', function(req, res, next) {
 	}else if(req.query.set=="checknow"){
 		data=fetch.allReadandPush();
 		id++;
-		host=process.env.HOSTNAME+":"+www.port;
-		if (www.port!=3000){
-			host=process.env.HOSTNAME;
-		}	
+		host=process.env.HOSTNAME;
+
+		if (process.env.HOSTNAME=="localhost"){
+			host+=":"+www.port;
+		}
+	
 		res.render('db.html', { 
 				title:"タイトルです",
 				id:id,
