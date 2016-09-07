@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 	}
 
 	else if(req.query.set=="check"){
-		data=fetch.allReadandResponse(res);
+		data=fetch.allReadandResponse(res,++id);
 		console.log("data");
 		console.log(data);
 //		res.send(data);

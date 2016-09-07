@@ -18,7 +18,7 @@ exports.read = function(){
 
 
 
-exports.allReadandResponse=function(res){
+exports.allReadandResponse=function(res,id){
 	var collection=db.col;
 	//console.log(collection);
 	var cursor = collection.find();
@@ -31,15 +31,27 @@ exports.allReadandResponse=function(res){
 			throw(err);
 		}
 		console.log(docs);
-		var resp="";
+		var resp="<table><tr><th>point</th><th>time</th><th>value</th></tr>";
 		if (docs!=null && docs.length!=0){
-		
+			
 			for (var i in docs){
-				resp+="point:"+docs[i].point+"<br>";
+				resp+="<tr>";
+				resp+="<td>"+docs[i].point+"</td>";
+				resp+="<td>"+docs[i].time+"</td>";
+				resp+="<td>"+docs[i].value+"</td>";
+				resp+="</tr>";
 			}
+			resp+="</table>";
 		}
-		res.render('test.html', { 
+		var host=process.env.HOSTNAME;
+
+		if (process.env.HOSTNAME=="localhost"){
+			host+=":"+process.env.PORT;
+		}
+		res.render('db.html', { 
 				title:"DB",
+				id:id,
+				host:host,
 			        content:resp,
 		});
 

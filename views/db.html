@@ -8,11 +8,8 @@
 
 </head>
 <body onLoad="load()">
-<div id="ptable">
-<table>
-<tr><th></th><th></th></tr>
-<tr><td></td><td></td></tr>
-</table>
+<div class="ptable">
+<%-content %>
 
 </div>
 <form><input></form><div></div>
@@ -28,12 +25,16 @@ jQuery(function($){
 		return false;
 	});
 });
+
 function load(){
 	socket.emit('connectcount', <%=id%>);
 
 }
 
+socket.on('refresh',function(data){
+	$('ptable').html(data);
 
+}
 
 socket.on('msg', function (data) {
 	//なんのためにいるのかわからん
