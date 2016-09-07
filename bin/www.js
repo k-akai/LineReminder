@@ -94,31 +94,38 @@ var io = require('socket.io')(server);
 var webPort = process.env.PORT || 3000;
 server.listen(webPort);
 
-ioexport={};
-socketlist=[];
-connectid=[];
-console.log(webPort);
-/*
-var dbsocket=io.of('/dbconfigsocket');
+//module.exports=ioexport={};
+//socketlist=[];
+//connectid=[];
+//console.log(webPort);
 
+
+//ioexport.io=io;
+exports.ioexport=[];
+exports.ioexport.push(io);
+
+var dbsocket=io.of('/dbsocket');
+socketlist=[];
 dbsocket.on('connection',function (socket) {
 	//console.log(socket.id);
-	console.log(socket);
+	//console.log(socket);
 	//特定用途のため、現状はプッシュしているだけ
 	socketlist.push(socket);
-	//console.log("socketcount:"+socketlist.length);
+	console.log("socketcount:"+socketlist.length);
 
 	//テスト用
 	socket.on('msg',function (data) {
-    		io.emit('msg', data);
+		//console.log(data);
+    		socket.emit('msg', data);
 	});
 
 	
 	socket.on('connectcount',function(data){
-		io.emit('socketid',socket.id);
+		socket.emit('socketid',socket.id);
 		//数字と、socketidをマッチさせておく
 		
-		//console.log(data);	
+		//console.log(data);
+		//console.log("dataadd");	
 	});
 
 	socket.on('disconnect', function() {
@@ -136,7 +143,7 @@ dbsocket.on('connection',function (socket) {
 		
 });
 
-*/
+/*
 io.on('connection',function (socket) {
 	//console.log(socket.id);
 	//console.log(socket);
@@ -171,9 +178,9 @@ io.on('connection',function (socket) {
 	});
 		
 });
+*/
 
-exports.socketlist=socketlist;
-exports.ioexport=io;
-exports.port=webPort;
+
+
 
 

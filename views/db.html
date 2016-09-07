@@ -8,6 +8,13 @@
 
 </head>
 <body onLoad="load()">
+<div id="ptable">
+<table>
+<tr><th></th><th></th></tr>
+<tr><td></td><td></td></tr>
+</table>
+
+</div>
 <form><input></form><div></div>
 </body>
 <script>
@@ -31,6 +38,7 @@ function load(){
 socket.on('msg', function (data) {
 	//なんのためにいるのかわからん
 	//data = $('<div/>').text(data).html();
+	console.log(data);
 	$('div').prepend(data + '<br>');
 });
 </script>

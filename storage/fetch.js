@@ -1,9 +1,5 @@
 var mongo = require('mongodb');
-
 var db=require("../storage/connection.js");
-var soc=require("../bin/www");
-
-//var emitter = require('socket.io-emitter')({ host: '127.0.0.1', port: 3000 });
 
 // 読み込み用メソッド
 exports.read = function(){
@@ -22,25 +18,31 @@ exports.read = function(){
 
 
 
-exports.allReadandPush=function(){
+exports.allReadandResponse=function(res){
 	var collection=db.col;
 	//console.log(collection);
 	var cursor = collection.find();
 	arrays=null;
 	
 	cursor.toArray(function(err, docs){
-		arrays=[];
 		// toArray用のコールバック関数
-		if(err){
-			
+		if(err){	
 			console.error('読み込みエラー');
 			throw(err);
 		}
-
-		console.log("xxx");
-		//soc.ioexport.sockets.emit("msg","aaaa");
-		arrays.push(docs);
 		console.log(docs);
+		var resp="";
+		if (docs!=null && docs.length!=0){
+		
+			for (var i in docs){
+				resp+="point:"+docs[i].point+"<br>";
+			}
+		}
+		res.render('test.html', { 
+				title:"DB",
+			        content:resp,
+		});
+
 	});
 
 	return arrays;
