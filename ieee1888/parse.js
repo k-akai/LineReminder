@@ -21,6 +21,7 @@ function deleteSpace(data){
 
 
 
+
 //fetchの解析
 exports.parseFetch=function(data){
 	//xml2jsがns使えないのでparse前にnamespaceを取る
@@ -36,32 +37,47 @@ exports.parseFetch=function(data){
 		
 	retdata.id=query["id"];
 	retdata.type=query["type"];
-	retdata.keys=[];
-	//queryが１つかどうか
-	if(query["key"]==undefined){
-		console.log("queryのkey２つは未実装。将来的に実装");
+	retdata.keys=null;
+	//queryが１つかどうか,1つであっても複数であっても配列にほり込む
+	if(isArray(query["key"])){
 		
+		//console.log("配列");
+		retdata.keys=query["key"];
 	}else{
-		var keys=checkQuery(query["key"]);
-		retdata.keys.push(query["key"]);
+		pushkey=[];
+		var attrs=Object.keys(query["key"]);
+		obs={};		
+		for( var i in attrs){
+			
+			var namekey=attrs[i];
+			console.log(namekey);
+			obs[namekey]=query["key"][namekey];
+			//obs.attrs[i]=query["key"][attrs[i]];
+		}
+		//pushkey.push(obs);
+		retdata.keys=pushkey;	
+
 	}
+	//console.log(retdata);
+	return retdata;
+}
+function isArray(o){
+  return Object.prototype.toString.call(o) === '[object Array]';
 }
 
 //現状テスト用
 function checkQuery(keys,retdata){
-	onekey={};	
-	for (key in keys){
-	
-		console.log(key);
+	onekey={};
+	console.log("checkkey");
+	for (i in keys){
+		console.log(keys[i]);
 	}
 	//console.log(key);
 	//require('../storage/util.js').write;
-	fetch.allReadTest();
+	//fetch.allReadTest();
 	return;
 
 }
-
-
 
 
 exports.parseWrite=function(data){
@@ -84,6 +100,7 @@ exports.parseWrite=function(data){
 	return "aa";
 }
 
+
 //parseWriteから呼ばれる関数
 function checkPoint(point){
 
@@ -103,6 +120,7 @@ function checkPoint(point){
 	}
 		
 }
+
 //parseWriteから呼ばれる関数
 function checkValue(point,time,val){
 	console.log("point="+point);
