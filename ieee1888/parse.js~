@@ -1,7 +1,8 @@
 var xml2js  = require('xml2js');
 var parser = require('xml2json');
-var db = require('../storage/connection');
-var fetch = require('../storage/fetch');
+//var db = require('../storage/connection');
+//var fetch = require('../storage/fetch');
+var share=require('../lib/share.js');
 //xml2jsがns使えないのでparse前にnamespaceを取るメソッド
 function deleteNS(data){
 	//var regExp=RegExp(/:/g)
@@ -54,7 +55,8 @@ function checkQuery(keys,retdata){
 		console.log(key);
 	}
 	//console.log(key);
-	fetch.allRead();
+	//require('../storage/util.js').write;
+	fetch.allReadTest();
 	return;
 
 }
@@ -122,7 +124,10 @@ function checkValue(point,time,val){
 		    "time" : date,
 		    "value" : val
 	};
-	db.writeAndView(doc);
+
+	var db=require('../storage/ieee1888.js');
+	console.log(db);
+	//db.writeAndView(doc);
 
 }
 

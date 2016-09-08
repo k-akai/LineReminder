@@ -89,99 +89,20 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
+//ここから追加
+//socketをopen
 
 var io = require('socket.io')(server);
 var webPort = process.env.PORT || 3000;
 server.listen(webPort);
 
-//module.exports=ioexport={};
-//socketlist=[];
-//connectid=[];
-//console.log(webPort);
 
+//exports.io=io;
 
-//ioexport.io=io;
-exports.ioexport=io;
-//exports.ioexport.push(io);
-
-var dbsocket=io.of('/dbsocket');
-socketlist=[];
-require('../lib/share').dbsocketlist = socketlist;
-dbsocket.on('connection',function (socket) {
-	//console.log(socket.id);
-	//console.log(socket);
-	//特定用途のため、現状はプッシュしているだけ
-	socketlist.push(socket);
-	console.log("socketcount:"+socketlist.length);
-
-	//テスト用
-	socket.on('msg',function (data) {
-		//console.log(data);
-    		socket.emit('msg', data);
-	});
-
-	
-	socket.on('connectcount',function(data){
-		socket.emit('socketid',socket.id);
-		//数字と、socketidをマッチさせておく
-		
-		//console.log(data);
-		//console.log("dataadd");	
-	});
-
-	socket.on('disconnect', function() {
-		num=-1;
-		for(i in socketlist){
-			if(socketlist[i]===socket){
-				num=i;
-				break;	
-			}
-		}
-		socketlist.splice(num,1);
-		console.log("socketcount:"+socketlist.length);
-    		console.log('disconnected');
-	});
-		
-});
-
-/*
-io.on('connection',function (socket) {
-	//console.log(socket.id);
-	//console.log(socket);
-	//特定用途のため、現状はプッシュしているだけ
-	socketlist.push(socket);
-	console.log("socketcount:"+socketlist.length);
-
-	//テスト用
-	socket.on('msg',function (data) {
-    		io.emit('msg', data);
-	});
-
-	
-	socket.on('connectcount',function(data){
-		io.emit('socketid',socket.id);
-		//数字と、socketidをマッチさせておく
-		
-		//console.log(data);	
-	});
-
-	socket.on('disconnect', function() {
-		num=-1;
-		for(i in socketlist){
-			if(socketlist[i]===socket){
-				num=i;
-				break;	
-			}
-		}
-		socketlist.splice(num,1);
-		console.log("socketcount:"+socketlist.length);
-    		console.log('disconnected');
-	});
-		
-});
-*/
-
-
+//initを呼び出す
+share=require('../lib/share');
+share.io=io;
+require('../lib/init.js');
 
 
 

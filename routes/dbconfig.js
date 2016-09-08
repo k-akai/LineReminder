@@ -1,18 +1,27 @@
 var express = require('express');
 var router = express.Router();
-var fetch = require('../storage/fetch.js');
-
+//var fetch = require('../storage/fetch.js');
+var ieee1888db=require('../storage/ieee1888.js');
 /* GET users listing. */
 var id=0;
 router.get('/', function(req, res, next) {
 	
-	if(req.query.set=="clear"){
-		console.log("clear-db making");
-		res.send('respond with a resource');
+	if(req.query.db=="ieee1888"){
+		if(req.query.control=="clear"){
+			console.log("clear-db making");
+		}else if(req.query.control="view"){
+			data=ieee1888db.allReadandResponse(res,++id);
+		}else{
+			res.send('controlを指定');
+		//res.send('respond with a resource');
+		}
+	}else{
+		res.send('未実装です');
 	}
-
+	/*
 	else if(req.query.set=="check"){
-		data=fetch.allReadandResponse(res,++id);
+		
+
 	}else if(req.query.set=="checknow"){
 		data=fetch.allReadandPush();
 		id++;
@@ -24,6 +33,7 @@ router.get('/', function(req, res, next) {
 			        content:"これはサンプルで作成したテンプレートです。",
 		});	
 	}
+	*/
 	
 });
 
