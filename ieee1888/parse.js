@@ -41,7 +41,7 @@ exports.parseFetch=function(data){
 	//queryが１つかどうか,1つであっても複数であっても配列にほり込む
 	if(isArray(query["key"])){
 		
-		//console.log("配列");
+		
 		retdata.keys=query["key"];
 	}else{
 		pushkey=[];
@@ -50,15 +50,13 @@ exports.parseFetch=function(data){
 		for( var i in attrs){
 			
 			var namekey=attrs[i];
-			console.log(namekey);
 			obs[namekey]=query["key"][namekey];
-			//obs.attrs[i]=query["key"][attrs[i]];
 		}
-		//pushkey.push(obs);
+		
 		retdata.keys=pushkey;	
 
 	}
-	//console.log(retdata);
+	
 	return retdata;
 }
 function isArray(o){
@@ -66,6 +64,7 @@ function isArray(o){
 }
 
 //現状テスト用
+/*
 function checkQuery(keys,retdata){
 	onekey={};
 	console.log("checkkey");
@@ -78,6 +77,7 @@ function checkQuery(keys,retdata){
 	return;
 
 }
+*/
 
 
 exports.parseWrite=function(data){
@@ -165,13 +165,57 @@ exports.makeOk=function(){
 }
 
 
-exports.makeFetchResonse=function(){
+exports.makeFetchResonse=function(data,res){
+	//console.log(data);
 	var xml="";
 	xml+="<?xml version='1.0' encoding='UTF-8'?>"
 	xml+='<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns2:queryRS xmlns:ns2="http://soap.fiap.org/"><transport xmlns="http://gutp.jp/fiap/2009/11/"><header><OK />';
-
-	return xml;
+	xml+='<query id="'+data.id+'" type="'+ data.type+'">';
+	for (var i in data["keys"]){
+		xml+='<key ';
+		var attrs=Object.keys(data["keys"][i]);
+		console.log(attrs);
+		for (var j in attrs){
+			var x=attrs[j];
+			xml+=x+'="'+data["keys"][i][x]+'"';
+		}
+		xml+='/>'
+	}
+	xml+="</query></header><body>";
+	
+	res.send(xml);
+	return;
 }
+
+/*
+<?xml version='1.0' encoding='UTF-8'?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+<soapenv:Body>
+<ns2:queryRS xmlns:ns2="http://soap.fiap.org/">
+<transport xmlns="http://gutp.jp/fiap/2009/11/">
+<header>
+<OK />
+<query id="7574065b-d493-41d3-8e6a-9163d0522b41" type="storage">
+<key id="http://fiap-nttcom-test.co.jp/test/switch" attrName="time" gteq="2013-07-16T00:00:15.000+09:00" />
+<key id="http://fiap-nttcom-test.co.jp/test/temperature" attrName="time" gteq="2013-07-16T00:00:15.000+09:00" />
+</query>
+</header>
+<body><point id="http://fiap-nttcom-test.co.jp/test/switch"><value time="2016-06-22T19:10:02.126+09:00">OFF</value><value time="2016-06-22T19:10:16.386+09:00">OFF</value><value time="2016-06-22T19:11:02.116+09:00">OFF</value><value time="2016-06-22T19:11:16.378+09:00">OFF</value><value time="2016-07-11T18:10:45.857+09:00">OFF</value><value time="2016-07-11T18:11:45.847+09:00">OFF</value><value time="2016-07-13T01:10:41.475+09:00">OFF</value><value time="2016-07-13T01:11:41.466+09:00">OFF</value></point><point id="http://fiap-nttcom-test.co.jp/test/temperature"><value time="2016-06-22T19:10:02.127+09:00">OFF</value><value time="2016-06-22T19:10:16.387+09:00">OFF</value><value time="2016-06-22T19:11:02.126+09:00">OFF</value><value time="2016-06-22T19:11:16.387+09:00">OFF</value><value time="2016-07-11T18:10:45.858+09:00">OFF</value><value time="2016-07-11T18:11:45.857+09:00">OFF</value><value time="2016-07-13T01:10:41.476+09:00">OFF</value><value time="2016-07-13T01:11:41.476+09:00">OFF</value></point></body></transport></ns2:queryRS></soapenv:Body></soapenv:Envelope>
+
+*/
+
+
+
+	/*
+	<?xml version='1.0' encoding='UTF-8'?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+<soapenv:Body>
+<ns2:queryRS xmlns:ns2="http://soap.fiap.org/">
+<transport xmlns="http://gutp.jp/fiap/2009/11/">
+<header>
+<error type="POINT_NOT_FOUND">http://fiap-nttcom-test.co.jp/test/temperature-2 was not found.</error><query id="7574065b-d493-41d3-8e6a-9163d0522b41" type="storage"><key id="http://fiap-nttcom-test.co.jp/test/temperature-2" attrName="time" gteq="2013-07-16T00:00:15.000+09:00" /></query></header></transport></ns2:queryRS></soapenv:Body></soapenv:Envelope>
+	*/
+
 
 
 /*perser版、作りかけ、あまりにライブラリがしょぼいので現状あきらめ
@@ -193,33 +237,3 @@ exports.makeFetchResonse=function(){
 	return str;
 }
 */
-
-
-
-/*
-<?xml version='1.0' encoding='UTF-8'?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
-<soapenv:Body>
-<ns2:queryRS xmlns:ns2="http://soap.fiap.org/">
-<transport xmlns="http://gutp.jp/fiap/2009/11/">
-<header>
-<OK />
-<query id="7574065b-d493-41d3-8e6a-9163d0522b41" type="storage">
-<key id="http://fiap-nttcom-test.co.jp/test/switch" attrName="time" gteq="2013-07-16T00:00:15.000+09:00" />
-<key id="http://fiap-nttcom-test.co.jp/test/temperature" attrName="time" gteq="2013-07-16T00:00:15.000+09:00" />
-</query>
-</header>
-<body><point id="http://fiap-nttcom-test.co.jp/test/switch"><value time="2016-06-22T19:10:02.126+09:00">OFF</value><value time="2016-06-22T19:10:16.386+09:00">OFF</value><value time="2016-06-22T19:11:02.116+09:00">OFF</value><value time="2016-06-22T19:11:16.378+09:00">OFF</value><value time="2016-07-11T18:10:45.857+09:00">OFF</value><value time="2016-07-11T18:11:45.847+09:00">OFF</value><value time="2016-07-13T01:10:41.475+09:00">OFF</value><value time="2016-07-13T01:11:41.466+09:00">OFF</value></point><point id="http://fiap-nttcom-test.co.jp/test/temperature"><value time="2016-06-22T19:10:02.127+09:00">OFF</value><value time="2016-06-22T19:10:16.387+09:00">OFF</value><value time="2016-06-22T19:11:02.126+09:00">OFF</value><value time="2016-06-22T19:11:16.387+09:00">OFF</value><value time="2016-07-11T18:10:45.858+09:00">OFF</value><value time="2016-07-11T18:11:45.857+09:00">OFF</value><value time="2016-07-13T01:10:41.476+09:00">OFF</value><value time="2016-07-13T01:11:41.476+09:00">OFF</value></point></body></transport></ns2:queryRS></soapenv:Body></soapenv:Envelope>
-
-*/
-
-
-	/*
-	<?xml version='1.0' encoding='UTF-8'?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
-<soapenv:Body>
-<ns2:queryRS xmlns:ns2="http://soap.fiap.org/">
-<transport xmlns="http://gutp.jp/fiap/2009/11/">
-<header>
-<error type="POINT_NOT_FOUND">http://fiap-nttcom-test.co.jp/test/temperature-2 was not found.</error><query id="7574065b-d493-41d3-8e6a-9163d0522b41" type="storage"><key id="http://fiap-nttcom-test.co.jp/test/temperature-2" attrName="time" gteq="2013-07-16T00:00:15.000+09:00" /></query></header></transport></ns2:queryRS></soapenv:Body></soapenv:Envelope>
-	*/

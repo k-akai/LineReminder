@@ -41,7 +41,7 @@ exports.parseFetch=function(data){
 	//queryが１つかどうか,1つであっても複数であっても配列にほり込む
 	if(isArray(query["key"])){
 		
-		console.log("配列");
+		
 		retdata.keys=query["key"];
 	}else{
 		pushkey=[];
@@ -50,15 +50,13 @@ exports.parseFetch=function(data){
 		for( var i in attrs){
 			
 			var namekey=attrs[i];
-			console.log(namekey);
 			obs[namekey]=query["key"][namekey];
-			//obs.attrs[i]=query["key"][attrs[i]];
 		}
-		pushkey.push(obs);
+		
 		retdata.keys=pushkey;	
 
 	}
-	console.log(retdata);
+	
 	return retdata;
 }
 function isArray(o){
@@ -66,6 +64,7 @@ function isArray(o){
 }
 
 //現状テスト用
+/*
 function checkQuery(keys,retdata){
 	onekey={};
 	console.log("checkkey");
@@ -78,6 +77,7 @@ function checkQuery(keys,retdata){
 	return;
 
 }
+*/
 
 
 exports.parseWrite=function(data){
@@ -165,12 +165,24 @@ exports.makeOk=function(){
 }
 
 
-exports.makeFetchResonse=function(){
+exports.makeFetchResonse=function(data,res){
+	//console.log(data);
 	var xml="";
 	xml+="<?xml version='1.0' encoding='UTF-8'?>"
 	xml+='<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns2:queryRS xmlns:ns2="http://soap.fiap.org/"><transport xmlns="http://gutp.jp/fiap/2009/11/"><header><OK />';
-
-	return xml;
+	xml+='<query id="'+data.id+'" type="'+ data.type+'">';
+	for (var i in data["keys"]){
+		xml+='<key ';
+		var attrs=Object.keys(data["keys"][i]);
+		console.log(attrs);
+		for (var j in attrs){
+			var x=attrs[j];
+			xml+=x+'="'+data["keys"][i][x]+'"';
+		}
+		xml+='/>'
+	}
+	res.send(xml);
+	return;
 }
 
 

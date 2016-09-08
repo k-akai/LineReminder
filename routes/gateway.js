@@ -33,9 +33,9 @@ router.post('/',function(req, res){
 			//解析
 			//responselist
 			responselist=[];
-			ieee1888.parseFetch(data);
+			data = ieee1888.parseFetch(data);
 			//var list=ieee1888.parseFetch(data,responselist);
-			var xml=ieee1888.makeFetchResonse();
+			var xml=ieee1888.makeFetchResonse(data,res);
 
 			res.send(xml);
 		}else{
