@@ -122,7 +122,7 @@ function checkValue(point,time,val){
 		    "time" : date,
 		    "value" : val
 	};
-	db.write(doc);
+	db.writeAndView(doc);
 
 }
 

@@ -101,11 +101,12 @@ server.listen(webPort);
 
 
 //ioexport.io=io;
-exports.ioexport=[];
-exports.ioexport.push(io);
+exports.ioexport=io;
+//exports.ioexport.push(io);
 
 var dbsocket=io.of('/dbsocket');
 socketlist=[];
+require('../lib/share').dbsocketlist = socketlist;
 dbsocket.on('connection',function (socket) {
 	//console.log(socket.id);
 	//console.log(socket);

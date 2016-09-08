@@ -1,6 +1,7 @@
 var xml2js  = require('xml2js');
 var parser = require('xml2json');
 var db = require('../storage/connection');
+var fetch = require('../storage/fetch');
 //xml2jsがns使えないのでparse前にnamespaceを取るメソッド
 function deleteNS(data){
 	//var regExp=RegExp(/:/g)
@@ -16,6 +17,50 @@ function deleteSpace(data){
 	data=data.replace(/\s\s+/g,"");
 	return data;
 }
+
+
+
+//fetchの解析
+exports.parseFetch=function(data){
+	//xml2jsがns使えないのでparse前にnamespaceを取る
+	//console.log(data)
+	data=deleteNS(data);
+	//jsonに変換
+	var json = JSON.parse(parser.toJson(data));
+	
+	
+	query=json["Envelope"]["Body"]["queryRQ"]["transport"]["header"]["query"];
+	
+	retdata={};
+		
+	retdata.id=query["id"];
+	retdata.type=query["type"];
+	retdata.keys=[];
+	//queryが１つかどうか
+	if(query["key"]==undefined){
+		console.log("queryのkey２つは未実装。将来的に実装");
+		
+	}else{
+		var keys=checkQuery(query["key"]);
+		retdata.keys.push(query["key"]);
+	}
+}
+
+//現状テスト用
+function checkQuery(keys,retdata){
+	onekey={};	
+	for (key in keys){
+	
+		console.log(key);
+	}
+	//console.log(key);
+	fetch.allRead();
+	return;
+
+}
+
+
+
 
 exports.parseWrite=function(data){
 	//xml2jsがns使えないのでparse前にnamespaceを取る
@@ -62,12 +107,22 @@ function checkValue(point,time,val){
 	console.log("time="+time);
 	console.log("val="+val);
 
+	//時間を変換する
+	date=null;
+	if (time==null){
+		date=new Date();
+	}else{
+		//解析する
+				
+		date=new Date(time);
+	}
+	console.log("new Date="+date);
 	doc = {
 		    "point" : point,
-		    "time" : time,
+		    "time" : date,
 		    "value" : val
 	};
-	db.write(doc);
+	db.writeAndView(doc);
 
 }
 
@@ -87,3 +142,61 @@ exports.makeOk=function(){
 }
 
 
+exports.makeFetchResonse=function(){
+	var xml="";
+	xml+="<?xml version='1.0' encoding='UTF-8'?>"
+	xml+='<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns2:queryRS xmlns:ns2="http://soap.fiap.org/"><transport xmlns="http://gutp.jp/fiap/2009/11/"><header><OK />';
+
+	return xml;
+}
+
+
+/*perser版、作りかけ、あまりにライブラリがしょぼいので現状あきらめ
+exports.makeFetchResonse=function(){
+	var builder = new xml2js.Builder({ rootName : 'soapenv:Envelope'});
+
+	var key={"id":"7574065b-d493-41d3-8e6a-9163d0522b41"};
+	var query={"query":key,$:{"id":"7574065b-d493-41d3-8e6a-9163d0522b41"}};
+	var header={"OK":"","query":query};
+	var transport={"header":header,$:{'xmlns':"http://gutp.jp/fiap/2009/11/"}};
+
+	var queryRS={"transport":transport,$:{'xmlns:ns2':"http://soap.fiap.org/"}};	
+
+	var body={"ns2:queryRS":queryRS};
+	
+	var root = {"soapenv:Body":body,$:{"xmlns:soapenv":"http://schemas.xmlsoap.org/soap/envelope/"}};
+	var xml = builder.buildObject(root);
+	var str=deleteSpace(xml.toString());
+	return str;
+}
+*/
+
+
+
+/*
+<?xml version='1.0' encoding='UTF-8'?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+<soapenv:Body>
+<ns2:queryRS xmlns:ns2="http://soap.fiap.org/">
+<transport xmlns="http://gutp.jp/fiap/2009/11/">
+<header>
+<OK />
+<query id="7574065b-d493-41d3-8e6a-9163d0522b41" type="storage">
+<key id="http://fiap-nttcom-test.co.jp/test/switch" attrName="time" gteq="2013-07-16T00:00:15.000+09:00" />
+<key id="http://fiap-nttcom-test.co.jp/test/temperature" attrName="time" gteq="2013-07-16T00:00:15.000+09:00" />
+</query>
+</header>
+<body><point id="http://fiap-nttcom-test.co.jp/test/switch"><value time="2016-06-22T19:10:02.126+09:00">OFF</value><value time="2016-06-22T19:10:16.386+09:00">OFF</value><value time="2016-06-22T19:11:02.116+09:00">OFF</value><value time="2016-06-22T19:11:16.378+09:00">OFF</value><value time="2016-07-11T18:10:45.857+09:00">OFF</value><value time="2016-07-11T18:11:45.847+09:00">OFF</value><value time="2016-07-13T01:10:41.475+09:00">OFF</value><value time="2016-07-13T01:11:41.466+09:00">OFF</value></point><point id="http://fiap-nttcom-test.co.jp/test/temperature"><value time="2016-06-22T19:10:02.127+09:00">OFF</value><value time="2016-06-22T19:10:16.387+09:00">OFF</value><value time="2016-06-22T19:11:02.126+09:00">OFF</value><value time="2016-06-22T19:11:16.387+09:00">OFF</value><value time="2016-07-11T18:10:45.858+09:00">OFF</value><value time="2016-07-11T18:11:45.857+09:00">OFF</value><value time="2016-07-13T01:10:41.476+09:00">OFF</value><value time="2016-07-13T01:11:41.476+09:00">OFF</value></point></body></transport></ns2:queryRS></soapenv:Body></soapenv:Envelope>
+
+*/
+
+
+	/*
+	<?xml version='1.0' encoding='UTF-8'?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+<soapenv:Body>
+<ns2:queryRS xmlns:ns2="http://soap.fiap.org/">
+<transport xmlns="http://gutp.jp/fiap/2009/11/">
+<header>
+<error type="POINT_NOT_FOUND">http://fiap-nttcom-test.co.jp/test/temperature-2 was not found.</error><query id="7574065b-d493-41d3-8e6a-9163d0522b41" type="storage"><key id="http://fiap-nttcom-test.co.jp/test/temperature-2" attrName="time" gteq="2013-07-16T00:00:15.000+09:00" /></query></header></transport></ns2:queryRS></soapenv:Body></soapenv:Envelope>
+	*/

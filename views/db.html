@@ -2,46 +2,51 @@
 <html lang="ja">
 <script src="/socket.io/socket.io.js"></script>
 <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
 <head>
 <meta charset="utf-8">
 <title><%=title%></title>
 
 </head>
 <body onLoad="load()">
-<div class="ptable">
-<%-content %>
-
-</div>
-<form><input></form><div></div>
+pointのDBの状態<br>
+<table class="ptable">
+<thead>
+<tr>
+<th>point</th>
+<th>time</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 </body>
 <script>
-//var socket = io();
 var socket=io.connect("<%=host%>");
 var socketid=null;
-jQuery(function($){
-	$('form').submit(function () {
-		socket.emit('msg', $('input').val());
-		$('input').val('');
-		return false;
-	});
-});
 
+function setter(data){
+	if(data!=null&&data.length!=0){
+		for (var i in data){
+			point=data[i]["point"];
+			time=data[i]["time"];
+			value=data[i]["value"];
+			$('.ptable').append("<tr><td>"+point+"</td><td>"+time+"</td><td>"+value+"</td></tr>");
+		}
+	}
+}
 function load(){
+	var data=<%- JSON.stringify(tabledata) %>
+	setter(data);
 	socket.emit('connectcount', <%=id%>);
-
 }
 
 socket.on('refresh',function(data){
-	$('ptable').html(data);
-
-}
-
-socket.on('msg', function (data) {
-	//なんのためにいるのかわからん
-	//data = $('<div/>').text(data).html();
-	console.log(data);
-	$('div').prepend(data + '<br>');
+	$('table.ptable tbody *').remove();
+	setter(data);
 });
+
 </script>
 </html>
 

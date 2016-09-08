@@ -1,10 +1,18 @@
 var mongo = require('mongodb');
 var db=require("../storage/connection.js");
-
+//var socket=("../websocket/dbsocket.js");
+var share=require("../lib/share.js");
 // 読み込み用メソッド
-exports.read = function(){
+exports.pushSocket = function(id){
+	//console.log("pushsocket open");
+	//console.log(share.dbsocketlist);
+	if (share.dbsocketlist!=null&&share.dbsocketlist.length!=0){
+		//console.log(share.dbsocketlist.length);
+	}else{
+		console.log("no socketlist");
+		return
+	}
 	var collection=db.col;
-	console.log(collection);
 	var cursor = collection.find();
 	cursor.toArray(function(err, docs){
 		// toArray用のコールバック関数
@@ -12,18 +20,27 @@ exports.read = function(){
 			console.error('読み込みエラー');
 			throw(err);
 		}
-		console.log(docs);
+		if (id==undefined){
+			//全ソケットにプッシュする
+			
+			if (share.dbsocketlist!=null&&share.dbsocketlist.length!=0){
+				for (var i in share.dbsocketlist){
+					share.dbsocketlist[i].emit('refresh',docs);
+				}
+			}
+			
+			//console.log("pushしたつもり");
+		}else{
+			console.log("id:"+id);
+			console.log("実装してください");
+		}
+		
 	});
 }
 
-
-
 exports.allReadandResponse=function(res,id){
 	var collection=db.col;
-	//console.log(collection);
 	var cursor = collection.find();
-	arrays=null;
-	
 	cursor.toArray(function(err, docs){
 		// toArray用のコールバック関数
 		if(err){	
@@ -31,34 +48,13 @@ exports.allReadandResponse=function(res,id){
 			throw(err);
 		}
 		console.log(docs);
-		var resp="<table><tr><th>point</th><th>time</th><th>value</th></tr>";
-		if (docs!=null && docs.length!=0){
-			
-			for (var i in docs){
-				resp+="<tr>";
-				resp+="<td>"+docs[i].point+"</td>";
-				resp+="<td>"+docs[i].time+"</td>";
-				resp+="<td>"+docs[i].value+"</td>";
-				resp+="</tr>";
-			}
-			resp+="</table>";
-		}
-		var host=process.env.HOSTNAME;
-
-		if (process.env.HOSTNAME=="localhost"){
-			host+=":"+process.env.PORT;
-		}
 		res.render('db.html', { 
 				title:"DB",
 				id:id,
-				host:host,
-			        content:resp,
+				host:process.env.HOSTNAME+"/dbsocket",
+			        tabledata:docs,
 		});
-
 	});
-
-	return arrays;
-
 }
 
 

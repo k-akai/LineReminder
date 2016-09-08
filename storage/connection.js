@@ -1,6 +1,6 @@
 var mongo = require('mongodb');
 var co  = require('co');
-
+var fetch =require('../storage/fetch.js');
 //console.log("DB connection start");
 var dbname=(process.env.DBNAME);
 var host=(process.env.DBHOST);
@@ -57,94 +57,20 @@ exports.write = function(json){
 	});
 }
 
-
-// 読み込み用メソッド
-exports.read = function(){
-	var cursor = collection.find();
-	cursor.toArray(function(err, docs){
-		// toArray用のコールバック関数
-		if(err){
-			console.error('読み込みエラー');
-			throw(err);
-		}
-		console.log(docs);
-	});
-}
-
-exports.allRead=function(){
-	
-	var cursor = collection.find();
-	arrays=null;
-	
-	cursor.toArray(function(err, docs){
-		arrays=[];
-		// toArray用のコールバック関数
-		if(err){
-			
-			console.error('読み込みエラー');
-			throw(err);
-		}
-		arrays.push(docs);
-		console.log(docs);
-	});
-
-	return arrays;
-
-}
-
-//作ったけど現状使わないので放置
-/*
-exports.allRead2=function(){
-	var array=[];
-	readTestx(array).then(function() {
-  		console.log("finish");
-	});
-	return array;
-}
-
-
-
-function readTestx(arrays){
-	return new Promise(function(){
-		var cursor = collection.find();
-		//arrays=[];
-	
-		cursor.toArray(function(err, docs){
-			// toArray用のコールバック関数
+// 書き込み用メソッド
+exports.writeAndView = function(json){
+	collection.insert(
+		json,
+		// 書き込み処理後のコールバック関数（省略可）
+		function(err, data){
 			if(err){
-				console.error('読み込みエラー');
+				console.error('書き込み時にエラーが発生しました');
 				throw(err);
 			}
-			arrays.push(docs);
-			console.log(docs);
-		});
+			console.log('データ書き込み完了:',data);
+			console.log('push socket');
+			fetch.pushSocket();
 	});
-}	
-*/
-function readTest(){
-	var cursor = collection.find();
-	arrays=[];
-	
-	cursor.toArray(function(err, docs){
-		// toArray用のコールバック関数
-		if(err){
-			console.error('読み込みエラー');
-			throw(err);
-		}
-		arrays.push(docs);
-		console.log(docs);
-	});
-	return arrays;
-
 }
 
-
-
-
-
-
-
-exports.clear=function(){
-	
-}
 

@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../storage/connection.js');
 var fetch = require('../storage/fetch.js');
 
 /* GET users listing. */
@@ -14,30 +13,14 @@ router.get('/', function(req, res, next) {
 
 	else if(req.query.set=="check"){
 		data=fetch.allReadandResponse(res,++id);
-		console.log("data");
-		console.log(data);
-//		res.send(data);
-
-		/*
-		 res.render('test.html', { 
-				title:"タイトルです",
-			        content:"これはサンプルで作成したテンプレートです。",
-		});	
-		*/
 	}else if(req.query.set=="checknow"){
 		data=fetch.allReadandPush();
 		id++;
-		host=process.env.HOSTNAME;
-
-		if (process.env.HOSTNAME=="localhost"){
-			host+=":"+process.env.PORT;
-		}
-		host+="/dbsocket";
-	
+		
 		res.render('db.html', { 
 				title:"タイトルです",
 				id:id,
-				host:host,
+				host:process.env.HOSTNAME+"/dbsocket",
 			        content:"これはサンプルで作成したテンプレートです。",
 		});	
 	}
