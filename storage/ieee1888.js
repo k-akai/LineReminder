@@ -72,6 +72,38 @@ exports.writeAndView = function(json){
 	});
 }
 
+exports.fetchSearchAndPush=function(res,data){
+	var collection=share.ieee1888collection;
+	var cursor = collection.find( { point: { $in: ['http://www.fiap.jp/out1','http://www.fiap.jp/out2'] }});
+	cursor.toArray(function(err, docs){
+		// toArray用のコールバック関数
+		if(err){	
+			console.error('読み込みエラー');
+			throw(err);
+		}
+		console.log(docs);
+		
+		var xml="";
+		xml+="<?xml version='1.0' encoding='UTF-8'?>"
+		xml+='<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns2:queryRS xmlns:ns2="http://soap.fiap.org/"><transport xmlns="http://gutp.jp/fiap/2009/11/"><header><OK />';
+		xml+='<query id="'+data.id+'" type="'+ data.type+'">';
+		for (var i in data["keys"]){
+			xml+='<key ';
+			var attrs=Object.keys(data["keys"][i]);
+			console.log(attrs);
+			for (var j in attrs){
+				var x=attrs[j];
+				xml+=x+'="'+data["keys"][i][x]+'"';
+			}
+			xml+='/>'
+		}
+		xml+="</query></header><body>";
+		
+		res.send(xml);
+	
+	});
+}
+
 
 
 module.exports.pushSocket=pushSocket;

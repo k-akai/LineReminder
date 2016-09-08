@@ -35,9 +35,9 @@ router.post('/',function(req, res){
 			responselist=[];
 			data = ieee1888.parseFetch(data);
 			//var list=ieee1888.parseFetch(data,responselist);
-			var xml=ieee1888.makeFetchResonse(data,res);
+			ieee1888.makeFetchResonse(data,res);
 
-			res.send(xml);
+			//res.send(xml);
 		}else{
 			console.log("未実装");
 		}

@@ -166,25 +166,10 @@ exports.makeOk=function(){
 
 
 exports.makeFetchResonse=function(data,res){
+	var db=require('../storage/ieee1888.js');
+	db.fetchSearchAndPush(res,data);
 	//console.log(data);
-	var xml="";
-	xml+="<?xml version='1.0' encoding='UTF-8'?>"
-	xml+='<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns2:queryRS xmlns:ns2="http://soap.fiap.org/"><transport xmlns="http://gutp.jp/fiap/2009/11/"><header><OK />';
-	xml+='<query id="'+data.id+'" type="'+ data.type+'">';
-	for (var i in data["keys"]){
-		xml+='<key ';
-		var attrs=Object.keys(data["keys"][i]);
-		console.log(attrs);
-		for (var j in attrs){
-			var x=attrs[j];
-			xml+=x+'="'+data["keys"][i][x]+'"';
-		}
-		xml+='/>'
-	}
-	xml+="</query></header><body>";
-	
-	res.send(xml);
-	return;
+
 }
 
 /*
