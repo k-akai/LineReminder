@@ -39,20 +39,25 @@ function pushSocket(id){
 exports.allReadandResponse=function(res,id){
 	var collection=share.ieee1888collection;
 	var cursor = collection.find();
-	cursor.toArray(function(err, docs){
-		// toArray用のコールバック関数
-		if(err){	
-			console.error('読み込みエラー');
-			throw(err);
+	cursor.toArray(a(id));
+
+        function a(id){
+		return function(err, docs) {
+			// toArray用のコールバック関数
+			if(err){	
+				console.error('読み込みエラー');
+				throw(err);
+			}
+			console.log(docs);
+			res.render('db.html', { 
+					title:"DB",
+					id:id,
+					host:process.env.HOSTNAME+"/dbsocket",
+					tabledata:docs,
+			});
 		}
-		console.log(docs);
-		res.render('db.html', { 
-				title:"DB",
-				id:id,
-				host:process.env.HOSTNAME+"/dbsocket",
-			        tabledata:docs,
-		});
-	});
+                
+	}
 }
 
 // 書き込み用メソッド
@@ -72,37 +77,14 @@ exports.writeAndView = function(json){
 	});
 }
 
-exports.fetchSearchAndPush=function(res,data){
+exports.fetchSearchAndPush=function(keys,res,data,func){
+
 	var collection=share.ieee1888collection;
-	var cursor = collection.find( { point: { $in: ['http://www.fiap.jp/out1','http://www.fiap.jp/out2'] }});
-	cursor.toArray(function(err, docs){
-		// toArray用のコールバック関数
-		if(err){	
-			console.error('読み込みエラー');
-			throw(err);
-		}
-		console.log(docs);
-		
-		var xml="";
-		xml+="<?xml version='1.0' encoding='UTF-8'?>"
-		xml+='<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns2:queryRS xmlns:ns2="http://soap.fiap.org/"><transport xmlns="http://gutp.jp/fiap/2009/11/"><header><OK />';
-		xml+='<query id="'+data.id+'" type="'+ data.type+'">';
-		for (var i in data["keys"]){
-			xml+='<key ';
-			var attrs=Object.keys(data["keys"][i]);
-			console.log(attrs);
-			for (var j in attrs){
-				var x=attrs[j];
-				xml+=x+'="'+data["keys"][i][x]+'"';
-			}
-			xml+='/>'
-		}
-		xml+="</query></header><body>";
-		
-		res.send(xml);
-	
-	});
-}
+	var cursor = collection.find( { point: { $in: keys}}).sort({'point':1});
+
+	cursor.toArray(function(err,docs){func(err,docs,res,data);});
+
+}	
 
 
 

@@ -164,12 +164,53 @@ exports.makeOk=function(){
 	return str;
 }
 
-
+//fetchデータを検索してresponse
 exports.makeFetchResonse=function(data,res){
+	keys=[];
+	for (var i in data["keys"]){
+		keys.push(data["keys"][i]["id"]);
+		
+	}
 	var db=require('../storage/ieee1888.js');
-	db.fetchSearchAndPush(res,data);
-	//console.log(data);
+	db.fetchSearchAndPush(keys,res,data,fetchResponse);
+}
 
+
+var fetchResponse=function(err,docs,res,data){
+	console.log(docs);
+	var xml="";
+	xml+="<?xml version='1.0' encoding='UTF-8'?>"
+	xml+='<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns2:queryRS xmlns:ns2="http://soap.fiap.org/"><transport xmlns="http://gutp.jp/fiap/2009/11/"><header><OK />';
+	xml+='<query id="'+data.id+'" type="'+ data.type+'">';
+	for (var i in data["keys"]){
+		xml+='<key ';
+		var attrs=Object.keys(data["keys"][i]);
+		//console.log(attrs);
+		for (var j in attrs){
+			var x=attrs[j];
+			xml+=x+'="'+data["keys"][i][x]+'"';
+		}
+		xml+='/>'
+	}
+	xml+="</query></header><body>";
+	
+	checkpoint="";
+	for (var i in docs){
+		console.log(docs[i]["time"]);
+		var times=docs[i]["time"].toISOString();
+		console.log(docs[i]["time"]);
+		if(docs[i]["point"]!=checkpoint){
+			if(checkpoint!=""){
+				xml+="</point>";
+			}
+			checkpoint=docs[i]["point"];
+			xml+='<point id="'+docs[i]["point"]+'">';
+		}
+		xml+='<value time="'+times+'">'+docs[i]["value"]+"</value>";		
+	}
+	xml+="</point></body></transport></ns2:queryRS></soapenv:Body></soapenv:Envelope>";
+	
+	res.send(xml);
 }
 
 /*
