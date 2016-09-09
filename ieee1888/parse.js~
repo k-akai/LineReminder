@@ -20,17 +20,14 @@ function deleteSpace(data){
 }
 
 
-
-
 //fetchの解析
 exports.parseFetch=function(data){
 	//xml2jsがns使えないのでparse前にnamespaceを取る
-	//console.log(data)
+
 	data=deleteNS(data);
 	//jsonに変換
 	var json = JSON.parse(parser.toJson(data));
-	
-	
+		
 	query=json["Envelope"]["Body"]["queryRQ"]["transport"]["header"]["query"];
 	
 	retdata={};
@@ -63,21 +60,7 @@ function isArray(o){
   return Object.prototype.toString.call(o) === '[object Array]';
 }
 
-//現状テスト用
-/*
-function checkQuery(keys,retdata){
-	onekey={};
-	console.log("checkkey");
-	for (i in keys){
-		console.log(keys[i]);
-	}
-	//console.log(key);
-	//require('../storage/util.js').write;
-	//fetch.allReadTest();
-	return;
 
-}
-*/
 
 
 exports.parseWrite=function(data){
@@ -136,7 +119,7 @@ function checkValue(point,time,val){
 				
 		date=new Date(time);
 	}
-	console.log("new Date="+date);
+	//console.log("new Date="+date);
 	doc = {
 		    "point" : point,
 		    "time" : date,
@@ -144,7 +127,7 @@ function checkValue(point,time,val){
 	};
 
 	var db=require('../storage/ieee1888.js');
-	console.log(db);
+	
 	db.writeAndView(doc);
 
 }
@@ -177,38 +160,49 @@ exports.makeFetchResonse=function(data,res){
 
 
 var fetchResponse=function(err,docs,res,data){
-	console.log(docs);
+
 	var xml="";
 	xml+="<?xml version='1.0' encoding='UTF-8'?>"
-	xml+='<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns2:queryRS xmlns:ns2="http://soap.fiap.org/"><transport xmlns="http://gutp.jp/fiap/2009/11/"><header><OK />';
+	xml+='<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns2:queryRS xmlns:ns2="http://soap.fiap.org/"><transport xmlns="http://gutp.jp/fiap/2009/11/"><header>';
+	if(docs.length==0){
+		xml+='<error type="POINT_NOT_FOUND">no point</error>';
+	}else{
+		xml+='<OK />';
+	}
 	xml+='<query id="'+data.id+'" type="'+ data.type+'">';
+	//console.log(docs);
+	
 	for (var i in data["keys"]){
 		xml+='<key ';
 		var attrs=Object.keys(data["keys"][i]);
-		//console.log(attrs);
+		
 		for (var j in attrs){
 			var x=attrs[j];
 			xml+=x+'="'+data["keys"][i][x]+'"';
 		}
-		xml+='/>'
+		xml+='/>';
 	}
 	xml+="</query></header><body>";
 	
 	checkpoint="";
-	for (var i in docs){
-		console.log(docs[i]["time"]);
-		var times=docs[i]["time"].toISOString();
-		console.log(docs[i]["time"]);
-		if(docs[i]["point"]!=checkpoint){
-			if(checkpoint!=""){
-				xml+="</point>";
+	if(docs.length!=0){
+		for (var i in docs){
+
+			times=docs[i]["time"].toISOString();
+
+			if(docs[i]["point"]!=checkpoint){
+				if(checkpoint!=""){
+					xml+="</point>";
+				}
+
+				checkpoint=docs[i]["point"];
+				xml+='<point id="'+docs[i]["point"]+'">';
 			}
-			checkpoint=docs[i]["point"];
-			xml+='<point id="'+docs[i]["point"]+'">';
+			xml+='<value time="'+times+'">'+docs[i]["value"]+"</value>";		
 		}
-		xml+='<value time="'+times+'">'+docs[i]["value"]+"</value>";		
+		xml+="</point>";
 	}
-	xml+="</point></body></transport></ns2:queryRS></soapenv:Body></soapenv:Envelope>";
+	xml+="</body></transport></ns2:queryRS></soapenv:Body></soapenv:Envelope>";
 	
 	res.send(xml);
 }
