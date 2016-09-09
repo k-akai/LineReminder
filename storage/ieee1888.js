@@ -7,7 +7,7 @@ function pushSocket(id){
 	if (share.dbsocketlist!=null&&share.dbsocketlist.length!=0){
 		//console.log(share.dbsocketlist.length);
 	}else{
-		console.log("no socketlist");
+		//console.log("no socketlist");
 		return
 	}
 	
@@ -80,13 +80,30 @@ exports.writeAndView = function(json){
 exports.fetchSearchAndPush=function(keys,res,data,func){
 
 	var collection=share.ieee1888collection;
-	var cursor = collection.find( { point: { $in: keys}}).sort({'point':1});
+	var cursor = collection.find( { point: { $in: keys}}).sort({'point':1}/*,{'time':1}*/);
 
-	cursor.toArray(function(err,docs){func(err,docs,res,data);});
+	cursor.toArray(function(err,docs){
+		//前処理
+		if(err){
+			console.error('エラーが発生しました');
+			throw(err);
+		}		
+
+		console.log(docs);
+		
+		//docs=nowData(docs);
+		if(data["keys"][0]["attrName"]=="now"){
+			//docs=nowData(docs);
+		}
+		func(err,docs,res,data);
+	});
 
 }	
 
-
+function nowData(docs){
+	console.log(docs);
+	return docs;
+}
 
 module.exports.pushSocket=pushSocket;
 

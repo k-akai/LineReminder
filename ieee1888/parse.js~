@@ -182,10 +182,11 @@ var fetchResponse=function(err,docs,res,data){
 		}
 		xml+='/>';
 	}
-	xml+="</query></header><body>";
+	xml+="</query></header>";
 	
 	checkpoint="";
 	if(docs.length!=0){
+		xml+="<body>";
 		for (var i in docs){
 
 			times=docs[i]["time"].toISOString();
@@ -200,9 +201,9 @@ var fetchResponse=function(err,docs,res,data){
 			}
 			xml+='<value time="'+times+'">'+docs[i]["value"]+"</value>";		
 		}
-		xml+="</point>";
+		xml+="</point></body>";
 	}
-	xml+="</body></transport></ns2:queryRS></soapenv:Body></soapenv:Envelope>";
+	xml+="</transport></ns2:queryRS></soapenv:Body></soapenv:Envelope>";
 	
 	res.send(xml);
 }

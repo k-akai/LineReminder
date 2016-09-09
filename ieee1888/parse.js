@@ -170,7 +170,7 @@ var fetchResponse=function(err,docs,res,data){
 		xml+='<OK />';
 	}
 	xml+='<query id="'+data.id+'" type="'+ data.type+'">';
-	//console.log(docs);
+
 	
 	for (var i in data["keys"]){
 		xml+='<key ';
