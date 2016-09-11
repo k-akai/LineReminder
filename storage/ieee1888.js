@@ -78,10 +78,16 @@ exports.writeAndView = function(json){
 }
 
 exports.fetchSearchAndPush=function(keys,res,data,func){
-
+	//console.log(keys);
 	var collection=share.ieee1888collection;
-	var cursor = collection.find( { point: { $in: keys}}).sort({'point':1}/*,{'time':1}*/);
-
+	//{[{}{{}}]}
+	
+	//var testkeys={'$and':[{"point":"http://www.fiap.jp/out1"},{"time":{"$gte":Date("2011-11-02T00:00:00+09:00"), "$lte" : Date("2018-11-02T00:00:00+09:00") }}]};
+	var date=Date("2011-11-02T00:00:00+09:00");
+	console.log(date);
+	var testkeys={'$and':[{"point":"http://www.fiap.jp/out1"},{"time":{"$gte":Date("2011-11-02T00:00:00+09:00")}}]};
+	//var cursor = collection.find( { point: { $in: keys}}).sort({'point':1});
+	var cursor = collection.find(testkeys).sort({'point':1});
 	cursor.toArray(function(err,docs){
 		//前処理
 		if(err){
@@ -92,9 +98,9 @@ exports.fetchSearchAndPush=function(keys,res,data,func){
 		console.log(docs);
 		
 		//docs=nowData(docs);
-		if(data["keys"][0]["attrName"]=="now"){
+		//if(data["keys"][0]["attrName"]=="now"){
 			//docs=nowData(docs);
-		}
+		//}
 		func(err,docs,res,data);
 	});
 
