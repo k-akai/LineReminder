@@ -153,12 +153,6 @@ exports.makeOk=function(){
 
 //fetchデータを検索してresponse
 exports.makeFetchResonse=function(data,res){
-	keys=[];
-	//console.log(data);
-	for (var i in data["keys"]){
-		keys.push(data["keys"][i]["id"]);
-		
-	}
 	var db=require('../storage/ieee1888.js');
 	db.fetchSearchAndPush(keys,res,data,fetchResponse);
 }
@@ -175,8 +169,10 @@ var fetchResponse=function(err,docs,res,data){
 		xml+='<OK />';
 	}
 	xml+='<query id="'+data.id+'" type="'+ data.type+'"';
+	var size=0;
 	if(data.acceptableSize!=undefined){
 		xml+=' acceptableSize="'+data.acceptableSize+'"';
+		size=parseInt(data.acceptableSize);
 	}
 	xml+='>';
 	
@@ -196,7 +192,9 @@ var fetchResponse=function(err,docs,res,data){
 	if(docs.length!=0){
 		xml+="<body>";
 		for (var i in docs){
-
+			if(size!=0&&i>=size){
+				break;
+			}
 			times=docs[i]["time"].toISOString();
 			times=times.replace(/Z/g,"+00:00");
 			

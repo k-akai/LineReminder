@@ -153,14 +153,8 @@ exports.makeOk=function(){
 
 //fetchデータを検索してresponse
 exports.makeFetchResonse=function(data,res){
-	keys=[];
-	//console.log(data);
-	for (var i in data["keys"]){
-		keys.push(data["keys"][i]["id"]);
-		
-	}
 	var db=require('../storage/ieee1888.js');
-	db.fetchSearchAndPush(keys,res,data,fetchResponse);
+	db.fetchSearchAndPush(res,data,fetchResponse);
 }
 
 

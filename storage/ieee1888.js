@@ -77,6 +77,8 @@ exports.writeAndView = function(json){
 	});
 }
 
+
+
 function makekeys(data){
 
 	var ret={
@@ -153,15 +155,15 @@ function makekeys(data){
 
 }
 
+// db.ieee1888.find({$or:[{$and:[{"point":"http://www.fiap.jp/out7"},{"time":{"$gte":ISODate("2011-11-01T00:00:00+09:00")}}]},{"point":"http://www.fiap.jp/out6"}]})
 
-exports.fetchSearchAndPush=function(keys,res,data,func){
+
+exports.fetchSearchAndPush=function(res,data,func){
 
 	var collection=share.ieee1888collection;
 	ret=makekeys(data);
-	
-	// db.ieee1888.find({$or:[{$and:[{"point":"http://www.fiap.jp/out7"},{"time":{"$gte":ISODate("2011-11-01T00:00:00+09:00")}}]},{"point":"http://www.fiap.jp/out6"}]})
 
-	var date=new Date("2011-11-02T00:00:00+09:00");
+
 	var cursor = collection.find(ret).sort({'time':-1});
 	cursor.toArray(function(err,docs){
 		//前処理
