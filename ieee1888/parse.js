@@ -192,6 +192,9 @@ var fetchResponse=function(err,docs,res,data){
 		for (var i in docs){
 
 			times=docs[i]["time"].toISOString();
+			times=times.replace(/Z/g,"+00:00");
+			
+			//console.log(times);
 
 			if(docs[i]["point"]!=checkpoint){
 				if(checkpoint!=""){

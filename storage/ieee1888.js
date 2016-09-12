@@ -77,24 +77,65 @@ exports.writeAndView = function(json){
 	});
 }
 
-exports.fetchSearchAndPush=function(keys,res,data,func){
+function makekeys(data){
+	//console.log(data);
+	var ret={
+		$or:[]
+		};
+	var and={
+		$and:[]
+		};
+	ret["$or"].push(and);
+	
+	var keys=data["keys"];
 	//console.log(keys);
+	for (var i in keys){
+		var p={};
+		p.point=keys[i]["id"];
+		and["$and"].push(p);
+		
+		var time={};
+		var timeflag=false;
+		if (keys[i]["eq"]!=undefined){
+			timeflag=true;
+			time["time"]=new Date(keys[i]["eq"]);
+		}
+
+		if (timeflag==true){
+			and["$and"].push(time);
+		}
+	}
+	console.log(ret);
+	return ret
+
+//{$or:[{$and:[{"point":"http://www.fiap.jp/out7"},{"time":{"$gte":date}}]},{"point":"http://www.fiap.jp/out6"}]};
+
+}
+
+
+exports.fetchSearchAndPush=function(keys,res,data,func){
+
 	var collection=share.ieee1888collection;
-	//{[{}{{}}]}
+	ret=makekeys(data);
 	
 	//var testkeys={'$and':[{"point":"http://www.fiap.jp/out1"},{"time":{"$gte":Date("2011-11-02T00:00:00+09:00"), "$lte" : Date("2018-11-02T00:00:00+09:00") }}]};
-	var date=Date("2011-11-02T00:00:00+09:00");
-	console.log(date);
-	var testkeys={'$and':[{"point":"http://www.fiap.jp/out1"},{"time":{"$gte":Date("2011-11-02T00:00:00+09:00")}}]};
+	// db.ieee1888.find({$or:[{$and:[{"point":"http://www.fiap.jp/out7"},{"time":{"$gte":ISODate("2011-11-01T00:00:00+09:00")}}]},{"point":"http://www.fiap.jp/out6"}]})
+
+	var date=new Date("2011-11-02T00:00:00+09:00");
+	//var testkeys={'$and':[{"point":"http://www.fiap.jp/out1"},{"time":{"$gte":Date("2011-11-02T00:00:00+09:00")}}]};
+	var testkeys={$or:[{$and:[{"point":"http://www.fiap.jp/out7"},{"time":{"$gte":date}}]},{"point":"http://www.fiap.jp/out6"}]};
+
+
+	//console.log(testkeys);
 	//var cursor = collection.find( { point: { $in: keys}}).sort({'point':1});
-	var cursor = collection.find(testkeys).sort({'point':1});
+	var cursor = collection.find(ret).sort({'time':1});
 	cursor.toArray(function(err,docs){
 		//前処理
 		if(err){
 			console.error('エラーが発生しました');
 			throw(err);
 		}		
-
+		console.log("------------結果------------------");
 		console.log(docs);
 		
 		//docs=nowData(docs);
