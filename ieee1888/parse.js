@@ -34,6 +34,9 @@ exports.parseFetch=function(data){
 		
 	retdata.id=query["id"];
 	retdata.type=query["type"];
+	if (query["acceptableSize"]!=undefined){
+		retdata.acceptableSize=query["acceptableSize"];
+	}
 	retdata.keys=null;
 	//queryが１つかどうか,1つであっても複数であっても配列にほり込む
 	if(isArray(query["key"])){
@@ -171,8 +174,13 @@ var fetchResponse=function(err,docs,res,data){
 	}else{
 		xml+='<OK />';
 	}
-	xml+='<query id="'+data.id+'" type="'+ data.type+'">';
-
+	xml+='<query id="'+data.id+'" type="'+ data.type+'"';
+	var size=0;
+	if(data.acceptableSize!=undefined){
+		xml+=' acceptableSize="'+data.acceptableSize+'"';
+		size=parseInt(data.acceptableSize);
+	}
+	xml+='>';
 	
 	for (var i in data["keys"]){
 		xml+='<key ';
@@ -190,7 +198,9 @@ var fetchResponse=function(err,docs,res,data){
 	if(docs.length!=0){
 		xml+="<body>";
 		for (var i in docs){
-
+			if(size!=0&&i>=size){
+				break;
+			}
 			times=docs[i]["time"].toISOString();
 			times=times.replace(/Z/g,"+00:00");
 			
