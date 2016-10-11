@@ -102,6 +102,7 @@ function　bot() {
 
 }
 router.post('/callback',function(req, res){
+    console.log("test");
     console.log(req);
     // LINE BOT
     //bot();
