@@ -10,7 +10,7 @@ var users = require('./routes/users');
 var gateway= require('./routes/gateway');
 var dbconfig = require('./routes/dbconfig');
 var sockettest = require('./routes/sockettest');
-
+var linebot= require('./routes/linebot');
 var app = express();
 
 
@@ -35,6 +35,7 @@ app.use('/users', users);
 app.use('/gateway',gateway);
 app.use('/dbconfig',dbconfig);
 app.use('/socket',sockettest);
+app.use('/linebot',linebot);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

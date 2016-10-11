@@ -154,7 +154,7 @@ exports.makeOk=function(){
 //fetchデータを検索してresponse
 exports.makeFetchResonse=function(data,res){
 	var db=require('../storage/ieee1888.js');
-	db.fetchSearchAndPush(keys,res,data,fetchResponse);
+	db.fetchSearchAndPush(res,data,fetchResponse);
 }
 
 
