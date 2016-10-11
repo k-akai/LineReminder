@@ -101,9 +101,10 @@ function　bot() {
     });
 
 }
-router.post('/callback',function(req, res){
+router.post('/',function(req, res){
     console.log("test");
     console.log(req);
+    res.send('未実装です');
     // LINE BOT
     //bot();
 
