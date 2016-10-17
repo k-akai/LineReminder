@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var request = require('request');
 
 var channel=(process.env.LINE_CHANNEL_ID);
 var csecret=(process.env.LINE_CHANNEL_ID_SEACRET);
@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 function bottest(){
   var headers = {
   'Content-Type' : 'application/json; charset=UTF-8',
-  'Authorization': 'Bearer YOUR_ACCESS_TOKEN '+ channnelAccessToken
+  'Authorization': 'Bearer '+ channnelAccessToken
   };
   var options = {
     url: 'https://api.line.me/v2/bot/message/reply',
@@ -34,81 +34,82 @@ function bottest(){
   });
   
 }
-function　bot() {
-  if(err){
-   return;
-  }
-  //ヘッダーを定義
+
+
+function reply(replyToken,text){
+  var url = 'https://api.line.me/v2/bot/message/reply';
   var headers = {
   'Content-Type' : 'application/json; charset=UTF-8',
-  'X-Line-ChannelID' : channel,
-  'X-Line-ChannelSecret' : csecret,
+  'Authorization':'Bearer '+ channelAccessToken
   };
 
-  // 送信相手の設定（配列）
-  var to_array = [];
-  to_array.push(json['result'][0]['content']['from']);
+  var message={
+    "type": "text",
+    "text": "Hello, world"
+  };
+  var data={
+    "replyToken":replyToken,
+    "messages":[message]
+  };
+  
+  //オプションを定義
+  var options = {
+    url: url,
+    //proxy : process.env.FIXIE_URL,
+    headers: headers,
+    json: true,
+    body: data
+   };  
 
+  console.log(data);
+  return;
+  request.post(options, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      console.log(body);
+    } else {
+      console.log('error: '+ JSON.stringify(response));
+    }
+  });
+};
 
-  // 送信データ作成
-  var data = {
-    'to': to_array,
-    'toChannel': 1383378250, //固定
-    'eventType':'140177271400161403', //固定
-    "content": {
-        "messageNotified": 0,
-        "messages": [
-            // テキスト
-            {
-               "contentType": 1,
-               "text": 'test',
-                    }/*,
-                    // 画像
-                    {
-                        "contentType": 2,
-                        "originalContentUrl": search_result['shop_image1'],
-                        "previewImageUrl": search_result['shop_image1']
-                    },
-                    // 位置情報
-                    {
-                        "contentType":7,
-                        "text": search_result['name'],
-                        "location":{
-                            "title": search_result['address'],
-                            "latitude": Number(search_result['latitude']),
-                            "longitude": Number(search_result['longitude'])
-                        }
-                    }
-		    */
-                ]
-            }
-        };
-        //オプションを定義
-   var options = {
-            url: 'https://trialbot-api.line.me/v1/events',
-            proxy : process.env.FIXIE_URL,
-            headers: headers,
-            json: true,
-            body: data
-   };
-
-   request.post(options, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                console.log(body);
-            } else {
-                console.log('error: '+ JSON.stringify(response));
-            }
-    });
-
-}
 router.post('/',function(req, res){
-    console.log("test");
-    console.log(req);
-    res.send('未実装です');
-    // LINE BOT
-    //bot();
+  //eventのデータを取得
+  var json = req.body.events;
+  //イベントが複数発生している場合
+  if(json.length!=1){
+    console.log("複数のイベントをもらっているので処理が不明");
+    console.log(json);
+    return;
+  }
+
+  //各種データの取得
+  var type=json[0].type;
+  var repToken=json[0].replyToken;
+  var timestamp=json[0].timestamp;
+  var source=json[0]["source"];
+  var message=json[0]["message"];
+  var userId=json[0].userId;
+  var date=new Date(parseInt(timestamp));
+  console.log(json);
+
+  //message以外のイベント
+  if (type!="message"){
+    console.log("message以外のイベントは対応が不明");
+    console.log(json);
+    return;
+  }
 
 
+  //messageイベント
+　　if (message.type=="text"){
+     var text=message.text;
+     console.log(text);
+     reply(repToken,text);
+     return;
+  }else{
+     return;
+  }
+ 
 });
 
 module.exports = router;
