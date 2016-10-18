@@ -68,7 +68,7 @@ function reply(replyToken,text){
    };  
 
   console.log(data);
-
+  
   request.post(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       console.log(body);
@@ -87,13 +87,21 @@ function reply(replyToken,text){
 
 
 //jsonファイルを出力する
-function outputJson(jsonS){
+function output(jsonS){
   var fs = require('fs');
-  fs.writeFile('hoge.json', JSON.stringify(data, null, '    '));
+
+  fs.writeFile('hoge.json',JSON.stringify(jsonS));
+ 
 }
 
 
 router.post('/',function(req, res){
+    //ログを出力する場合に使う
+    //output(req.body);
+
+    console.log(req);
+    res.send("aa");
+    return;
     //eventのデータを取得
     var json = req.body.events;
     //イベントが複数発生している場合
@@ -102,12 +110,6 @@ router.post('/',function(req, res){
       console.log(json);
       return;
     }
-
-　　　　outputJson(req.body);
-    return;
-    
-
-
 
 
     //各種データの取得
@@ -126,7 +128,7 @@ router.post('/',function(req, res){
     
     //var userId=json[0].userId;
     var date=new Date(parseInt(timestamp));
-    //console.log(json);
+
  
     //message以外のイベント
     if (type!="message"){
@@ -141,9 +143,11 @@ router.post('/',function(req, res){
 	
 	var text=message.text;
 	console.log(text);
-	reply(repToken,text);
+	//reply(repToken,text);
+ 	res.send(req.body);
 	return;
     }else{
+	res.send(req.body);
 	return;
     }
  
