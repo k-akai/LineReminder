@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var request = require('request');
+var fs = require('fs');
+
 
 var channel=(process.env.LINE_CHANNEL_ID);
 var csecret=(process.env.LINE_CHANNEL_ID_SEACRET);
@@ -84,8 +86,11 @@ function reply(replyToken,text){
 
 
 
-
-
+//jsonファイルを出力する
+function outputJson(jsonS){
+  var fs = require('fs');
+  fs.writeFile('hoge.json', JSON.stringify(data, null, '    '));
+}
 
 
 router.post('/',function(req, res){
@@ -97,7 +102,14 @@ router.post('/',function(req, res){
       console.log(json);
       return;
     }
+
+　　　　outputJson(req.body);
+    return;
     
+
+
+
+
     //各種データの取得
     var type=json[0].type;
     var repToken=json[0].replyToken;
