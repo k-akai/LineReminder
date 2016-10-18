@@ -36,6 +36,10 @@ function bottest(){
 }
 
 
+
+
+
+
 function reply(replyToken,text){
   var url = 'https://api.line.me/v2/bot/message/reply';
   var headers = {
@@ -62,7 +66,7 @@ function reply(replyToken,text){
    };  
 
   console.log(data);
-  return;
+
   request.post(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       console.log(body);
@@ -72,44 +76,68 @@ function reply(replyToken,text){
   });
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
 router.post('/',function(req, res){
-  //eventのデータを取得
-  var json = req.body.events;
-  //イベントが複数発生している場合
-  if(json.length!=1){
-    console.log("複数のイベントをもらっているので処理が不明");
-    console.log(json);
-    return;
-  }
+    //eventのデータを取得
+    var json = req.body.events;
+    //イベントが複数発生している場合
+    if(json.length!=1){
+      console.log("複数のイベントをもらっているので処理が不明");
+      console.log(json);
+      return;
+    }
+    
+    //各種データの取得
+    var type=json[0].type;
+    var repToken=json[0].replyToken;
+    var timestamp=json[0].timestamp;
+    
+    var source=json[0]["source"];
+    //source format
+    // { userId: 'xxx', type: 'user' }
+    // { roomId: 'yyy', type: 'room' }
+    
+    var message=json[0]["message"];
+    //message format
+    //{ type: 'text', id: 'zzz', text: 'あ' }
+    
+    //var userId=json[0].userId;
+    var date=new Date(parseInt(timestamp));
+    //console.log(json);
+ 
+    //message以外のイベント
+    if (type!="message"){
+      console.log("message以外のイベントは対応が不明");
+      console.log(json);
+      return;
+    }
 
-  //各種データの取得
-  var type=json[0].type;
-  var repToken=json[0].replyToken;
-  var timestamp=json[0].timestamp;
-  var source=json[0]["source"];
-  var message=json[0]["message"];
-  var userId=json[0].userId;
-  var date=new Date(parseInt(timestamp));
-  console.log(json);
-
-  //message以外のイベント
-  if (type!="message"){
-    console.log("message以外のイベントは対応が不明");
-    console.log(json);
-    return;
-  }
-
-
-  //messageイベント
-　　if (message.type=="text"){
-     var text=message.text;
-     console.log(text);
-     reply(repToken,text);
-     return;
-  }else{
-     return;
-  }
+    
+    //messageイベント
+    if (message.type=="text"){
+	
+	var text=message.text;
+	console.log(text);
+	reply(repToken,text);
+	return;
+    }else{
+	return;
+    }
  
 });
+
+
+
 
 module.exports = router;

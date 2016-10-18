@@ -29,27 +29,13 @@ exports.write = function(json,collection){
 	});
 }
 
+
+
+
 exports.clear =function(collection){
 
 	collection.remove();
 }
 
 
-// 書き込み用メソッド
-/*
-exports.writeAndView = function(json,collection){
-	collection.insert(
-		json,
-		// 書き込み処理後のコールバック関数（省略可）
-		function(err, data){
-			if(err){
-				console.error('書き込み時にエラーが発生しました');
-				throw(err);
-			}
-			console.log('データ書き込み完了:',data);
-			console.log('push socket');
-			fetch.pushSocket(collection);
-	});
-}
-*/
 
