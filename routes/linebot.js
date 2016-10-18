@@ -99,7 +99,7 @@ router.post('/',function(req, res){
     //ログを出力する場合に使う
     //output(req.body);
 
-    console.log(req);
+    console.log(req.body);
     res.send("aa");
     return;
     //eventのデータを取得
