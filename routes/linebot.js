@@ -62,7 +62,6 @@ function reply(replyToken,text){
   //オプションを定義
   var options = {
     url: url,
-    //proxy : process.env.FIXIE_URL,
     headers: headers,
     json: true,
     body: data
@@ -98,7 +97,7 @@ function output(jsonS){
 
 router.post('/',function(req, res){
     //ログを出力する場合に使う
-    //output(req.body);
+    output(req.body);
 
     console.log(req.body);
 
@@ -139,10 +138,11 @@ router.post('/',function(req, res){
     
     //messageイベント
     if (message.type=="text"){
-	
 	var text=message.text;
-	console.log(text);
-	lineapi.reply(repToken,"test");
+	console.log("push");
+	lineapi.pushMessage("xxx","test2");
+	
+	//lineapi.replyMessage(repToken,"test");
  	res.send(req.body);
 	return;
     }else{
