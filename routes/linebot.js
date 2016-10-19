@@ -10,8 +10,6 @@ router.get('/', function(req, res, next) {
 	res.send('respond with a resource');
 });
 
-
-
 //jsonファイルを出力する.デバッグ用
 function output(jsonS){
   var fs = require('fs');
@@ -57,12 +55,17 @@ router.post('/',function(req, res){
 	      break;
 	    }
 	    
+	    //各種処理の分岐をする
+	　　　　//家計簿botの場合のルールを設定
+	    data={};
+	    brunch=lineu.judgeBrunchMessage(source,message,data);　　　　　　　　　　　　
+
 	    //messageイベント
-	    if (message.type=="text"){
+	    if (brunch==1){
 		var text=message.text;
-		//lineu.dbTest();
-		//lineapi.pushMessage("xxx","test2");
-		lineapi.replyMessage(repToken,"解析中…");
+                console.log(data.id);
+		lineapi.pushMessage(data.id,data.messages);
+		//lineapi.replyMessage(repToken,"解析中…");
 	 	res.send(req.body);
 		//return;
 	    }else{
