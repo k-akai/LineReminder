@@ -64,8 +64,8 @@ router.post('/',function(req, res){
 	    if (brunch==1){
 		var text=message.text;
                 console.log(data.id);
-		lineapi.pushMessage(data.id,data.messages);
-		//lineapi.replyMessage(repToken,"解析中…");
+		//lineapi.pushMessage(data.id,data.messages);
+		lineapi.replyMessage(repToken,"解析中…");
 	 	res.send(req.body);
 		//return;
 	    }else{
