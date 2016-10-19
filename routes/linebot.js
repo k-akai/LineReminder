@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 var fs = require('fs');
+var lineapi=require('../line/lineapi.js');
 
 
 var channel=(process.env.LINE_CHANNEL_ID);
@@ -86,7 +87,7 @@ function reply(replyToken,text){
 
 
 
-//jsonファイルを出力する
+//jsonファイルを出力する.デバッグ用
 function output(jsonS){
   var fs = require('fs');
 
@@ -100,8 +101,7 @@ router.post('/',function(req, res){
     //output(req.body);
 
     console.log(req.body);
-    res.send("aa");
-    return;
+
     //eventのデータを取得
     var json = req.body.events;
     //イベントが複数発生している場合
@@ -110,7 +110,6 @@ router.post('/',function(req, res){
       console.log(json);
       return;
     }
-
 
     //各種データの取得
     var type=json[0].type;
@@ -143,7 +142,7 @@ router.post('/',function(req, res){
 	
 	var text=message.text;
 	console.log(text);
-	//reply(repToken,text);
+	lineapi.reply(repToken,"test");
  	res.send(req.body);
 	return;
     }else{
@@ -152,8 +151,6 @@ router.post('/',function(req, res){
     }
  
 });
-
-
 
 
 module.exports = router;
