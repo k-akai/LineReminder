@@ -3,93 +3,18 @@ var router = express.Router();
 var request = require('request');
 var fs = require('fs');
 var lineapi=require('../line/lineapi.js');
+var lineu=require('../line/lineutil.js');
 
-
-var channel=(process.env.LINE_CHANNEL_ID);
-var csecret=(process.env.LINE_CHANNEL_ID_SEACRET);
-var channelAccessToken=(process.env.LINE_CHANNEL_ID_SEACRET);
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-
 	res.send('respond with a resource');
 });
-
-
-function bottest(){
-  var headers = {
-  'Content-Type' : 'application/json; charset=UTF-8',
-  'Authorization': 'Bearer '+ channnelAccessToken
-  };
-  var options = {
-    url: 'https://api.line.me/v2/bot/message/reply',
-    proxy : process.env.FIXIE_URL,
-    headers: headers,
-    json: true,
-    body: data
-  };
-
-  request.post(options, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-         console.log(body);
-    } else {
-         console.log('error: '+ JSON.stringify(response));
-    }
-  });
-  
-}
-
-
-
-
-
-
-function reply(replyToken,text){
-  var url = 'https://api.line.me/v2/bot/message/reply';
-  var headers = {
-  'Content-Type' : 'application/json; charset=UTF-8',
-  'Authorization':'Bearer '+ channelAccessToken
-  };
-
-  var message={
-    "type": "text",
-    "text": "Hello, world"
-  };
-  var data={
-    "replyToken":replyToken,
-    "messages":[message]
-  };
-  
-  //オプションを定義
-  var options = {
-    url: url,
-    headers: headers,
-    json: true,
-    body: data
-   };  
-
-  console.log(data);
-  
-  request.post(options, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      console.log(body);
-    } else {
-      console.log('error: '+ JSON.stringify(response));
-    }
-  });
-};
-
-
-
-
-
-
 
 
 
 //jsonファイルを出力する.デバッグ用
 function output(jsonS){
   var fs = require('fs');
-
   fs.writeFile('hoge.json',JSON.stringify(jsonS));
  
 }
@@ -99,58 +24,52 @@ router.post('/',function(req, res){
     //ログを出力する場合に使う
     output(req.body);
 
-    console.log(req.body);
-
     //eventのデータを取得
     var json = req.body.events;
-    //イベントが複数発生している場合
-    if(json.length!=1){
-      console.log("複数のイベントをもらっているので処理が不明");
-      console.log(json);
-      return;
-    }
 
-    //各種データの取得
-    var type=json[0].type;
-    var repToken=json[0].replyToken;
-    var timestamp=json[0].timestamp;
-    
-    var source=json[0]["source"];
-    //source format
-    // { userId: 'xxx', type: 'user' }
-    // { roomId: 'yyy', type: 'room' }
-    
-    var message=json[0]["message"];
-    //message format
-    //{ type: 'text', id: 'zzz', text: 'あ' }
-    
-    //var userId=json[0].userId;
-    var date=new Date(parseInt(timestamp));
+    for(var i in json){
+	   //イベントが複数発生している場合
+	    if(i>0){
+	      console.log("複数のイベントをもらっているので処理が不明");
+	      console.log(json);
+	      return;
+	    }
 
- 
-    //message以外のイベント
-    if (type!="message"){
-      console.log("message以外のイベントは対応が不明");
-      console.log(json);
-      return;
-    }
+	    //各種データの取得
+	    var type=json[i].type;
+	    var repToken=json[i].replyToken;
+	    var timestamp=json[i].timestamp;
+	    var date=new Date(parseInt(timestamp));
 
-    
-    //messageイベント
-    if (message.type=="text"){
-	var text=message.text;
-	console.log("push");
-	lineapi.pushMessage("xxx","test2");
-	
-	//lineapi.replyMessage(repToken,"test");
- 	res.send(req.body);
-	return;
-    }else{
-	res.send(req.body);
-	return;
-    }
- 
+	    var source=json[i]["source"];
+	    //source format
+	    // { userId: 'xxx', type: 'user' }
+	    // { roomId: 'yyy', type: 'room' }
+	    
+	    var message=json[i]["message"];
+	    //message format
+	    //{ type: 'text', id: 'zzz', text: 'あ' }
+
+	    //message以外のイベント
+	    if (type!="message"){
+	      console.log("message以外のイベントは対応が不明");
+	      console.log(json);
+	      break;
+	    }
+	    
+	    //messageイベント
+	    if (message.type=="text"){
+		var text=message.text;
+		//lineu.dbTest();
+		//lineapi.pushMessage("xxx","test2");
+		lineapi.replyMessage(repToken,"解析中…");
+	 	res.send(req.body);
+		//return;
+	    }else{
+		res.send(req.body);
+		//return;
+	    } 
+     }
 });
-
 
 module.exports = router;
