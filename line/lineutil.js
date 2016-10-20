@@ -17,13 +17,14 @@ exports.judgeBrunchMessage=function(source,message,data){
   data.id="aaa";
   data.messages="テストテスト";
   id=null;
+  
   if (source.type=="room"){
     id=source.roomId;
   }else if(source.type=="user"){
     id=source.userId;
   }
   linedb.userFind(id);
-  return 1;
+  return 2;
 }
 
 

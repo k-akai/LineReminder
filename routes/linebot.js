@@ -13,10 +13,8 @@ router.get('/', function(req, res, next) {
 //jsonファイルを出力する.デバッグ用
 function output(jsonS){
   var fs = require('fs');
-  fs.writeFile('hoge.json',JSON.stringify(jsonS));
- 
+  fs.writeFile('hoge.json',JSON.stringify(jsonS,null, "    "));
 }
-
 
 router.post('/',function(req, res){
     //ログを出力する場合に使う
@@ -63,7 +61,6 @@ router.post('/',function(req, res){
 	    //messageイベント
 	    if (brunch==1){
 		var text=message.text;
-                console.log(data.id);
 		//lineapi.pushMessage(data.id,data.messages);
 		lineapi.replyMessage(repToken,"解析中…");
 	 	res.send(req.body);
