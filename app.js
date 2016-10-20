@@ -11,6 +11,7 @@ var gateway= require('./routes/gateway');
 var dbconfig = require('./routes/dbconfig');
 var sockettest = require('./routes/sockettest');
 var linebot= require('./routes/linebot');
+var image= require('./routes/image');
 var app = express();
 
 
@@ -29,6 +30,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/image',express.static('local/image'));
 
 app.use('/', routes);
 app.use('/users', users);
@@ -36,6 +38,7 @@ app.use('/gateway',gateway);
 app.use('/dbconfig',dbconfig);
 app.use('/socket',sockettest);
 app.use('/linebot',linebot);
+app.use('/image',image);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -66,8 +66,7 @@ router.post('/',function(req, res){
 	 	res.send(req.body);
 		//return;
 	    }else if(brunch==2){
-
-		lineapi.getContent("5083328233372");
+		lineapi.getContent(message.id,"local/image/"+message.id);
 　　　　　　　　　　　　　　　　res.send(req.body);
 	    }else{
 		res.send(req.body);
