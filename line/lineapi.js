@@ -1,6 +1,52 @@
 var share=require('../lib/share.js');
 var channelAccessToken=(process.env.LINE_CHANNEL_ID_SEACRET);
 var request = require('request');
+var fs = require('fs');
+
+
+exports.getContent=function(message,setdir){
+
+　　var url = 'https://api.line.me/v2/bot/message/'+message+'/content';
+
+  var headers = {
+  //　　'Content-Type' : 'application/json; charset=UTF-8',
+ 　　 'Authorization':'Bearer '+ channelAccessToken
+  };
+
+  //オプションを定義
+  var options = {
+    url: url,
+    headers: headers,
+　　　　encoding:null,
+    //json: true,
+   // body: data
+   };  
+
+   
+  request.get(options,function (error, response, body) {
+    console.log(url);
+    console.log(body);
+    if (!error && response.statusCode == 200) {
+　　　　fs.writeFile(setdir,body,function (err) {
+
+	if(err!=null){
+		
+   　　　    console.log(err);
+	  console.log("error-write");
+	}
+　　　　});
+
+    
+    } else {
+      console.log('error: '+response);
+    }
+  });
+}
+
+
+
+
+
 
 
 exports.pushMessage=function(toS,text){
@@ -27,7 +73,7 @@ exports.pushMessage=function(toS,text){
     json: true,
     body: data
    };  
-
+ 
   request.post(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       //console.log(body);

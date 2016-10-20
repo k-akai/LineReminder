@@ -65,6 +65,10 @@ router.post('/',function(req, res){
 		lineapi.replyMessage(repToken,"解析中…");
 	 	res.send(req.body);
 		//return;
+	    }else if(brunch==2){
+
+		lineapi.getContent("5083328233372");
+　　　　　　　　　　　　　　　　res.send(req.body);
 	    }else{
 		res.send(req.body);
 		//return;

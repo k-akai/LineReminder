@@ -9,7 +9,7 @@ exports.userFind=function(id){
 			console.error('読み込みエラー');
 			throw(err);
 		}
-　　　　　　　　　　　
+　　　　　　　　　　　	console.log("db-result");
 		console.log(docs);
 		
 	});
