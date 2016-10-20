@@ -26,7 +26,7 @@ exports.judgeBrunchMessage=function(source,message,data){
     id=source.userId;
   }
   linedb.userFind(id);
-  return 2;
+  return 1;
 }
 
 
