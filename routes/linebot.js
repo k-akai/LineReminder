@@ -63,15 +63,13 @@ router.post('/',function(req, res){
 		var text=message.text;
 		//lineapi.pushMessage(data.id,data.messages);
 		lineapi.replyMessage(repToken,"解析中…");
-	 	res.send(req.body);
-		//return;
+	 			
 	    }else if(brunch==2){
-		lineapi.getContent(message.id,"local/image/"+message.id);
-　　　　　　　　　　　　　　　　res.send(req.body);
+		lineapi.getContent(message.id,"local/image/"+message.id);　　　　　　　　　　
 	    }else{
-		res.send(req.body);
-		//return;
+			
 	    } 
+	    res.send(req.body);
      }
 });
 

@@ -17,7 +17,9 @@ exports.judgeBrunchMessage=function(source,message,data){
   data.id="aaa";
   data.messages="テストテスト";
   id=null;
-  
+  if (message.type=="image"){
+	return 2;
+  }
   if (source.type=="room"){
     id=source.roomId;
   }else if(source.type=="user"){
