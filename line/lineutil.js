@@ -13,7 +13,7 @@ exports.dbTest=function(){
 
 
 //どの処理を実施するか割り当てる
-exports.judgeBrunchMessage=function(source,message,data){
+exports.checkCallback=function(source,message,data){
   data.id="aaa";
   data.messages="テストテスト";
   id=null;

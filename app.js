@@ -38,7 +38,7 @@ app.use('/gateway',gateway);
 app.use('/dbconfig',dbconfig);
 app.use('/socket',sockettest);
 app.use('/linebot',linebot);
-app.use('/lineImage',image);
+app.use('/lineImage',lineImage);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

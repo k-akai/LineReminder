@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 //jsonファイルを出力する.デバッグ用
 function output(jsonS){
   var fs = require('fs');
-  fs.writeFile('hoge.json',JSON.stringify(jsonS,null, "    "));
+  fs.writeFile('local/hoge.json',JSON.stringify(jsonS,null, "    "));
 }
 
 router.post('/',function(req, res){
@@ -56,7 +56,7 @@ router.post('/',function(req, res){
 	    //各種処理の分岐をする
 	　　　　//家計簿botの場合のルールを設定
 	    data={};
-	    brunch=lineu.judgeBrunchMessage(source,message,data);　　　　　　　　　　　　
+	    brunch=lineu.checkCallback(source,message,data);　　　　　　　　　　　　
 
 	    //messageイベント
 	    if (brunch==1){
