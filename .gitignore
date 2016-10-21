@@ -43,6 +43,7 @@ jspm_packages
 #direnv
 .envrc
 
+.eslintrc.js
 #parameter
 local
 
