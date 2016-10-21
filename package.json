@@ -23,5 +23,11 @@
     "socket.io-redis": "^1.0.0",
     "xml2js": "~0.4.1",
     "xml2json": "^0.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.8.1",
+    "eslint-config-standard": "^6.2.0",
+    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-standard": "^2.0.1"
   }
 }

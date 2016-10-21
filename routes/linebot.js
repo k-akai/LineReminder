@@ -18,6 +18,14 @@ function output(jsonS){
 
 router.post('/',function(req, res){
     //ログを出力する場合に使う
+console.log(1)
+try {
+    a()
+} catch (e) {
+    console.error(e.toString())
+    res.status(503).end("internal error")
+}
+console.log(2)
     output(req.body);
 
     //eventのデータを取得
