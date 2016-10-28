@@ -6,10 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
-var gateway= require('./routes/gateway');
-var dbconfig = require('./routes/dbconfig');
-var sockettest = require('./routes/sockettest');
+//var users = require('./routes/users');
+//var gateway= require('./routes/gateway');
+//var dbconfig = require('./routes/dbconfig');
+//var sockettest = require('./routes/sockettest');
 var linebot= require('./routes/linebot');
 var lineImage= require('./routes/image');
 var app = express();
@@ -33,10 +33,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/image',express.static('local/image'));
 
 app.use('/', routes);
-app.use('/users', users);
-app.use('/gateway',gateway);
-app.use('/dbconfig',dbconfig);
-app.use('/socket',sockettest);
+//app.use('/users', users);
+//app.use('/gateway',gateway);
+//app.use('/dbconfig',dbconfig);
+//app.use('/socket',sockettest);
 app.use('/linebot',linebot);
 app.use('/lineImage',lineImage);
 
