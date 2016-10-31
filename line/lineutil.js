@@ -1,6 +1,6 @@
-var share=require('../lib/share.js');
+var share=require('../lib/share.js')
 //var dbutil=require('../storage/dbutil.js');
-var linedb=require('../storage/line.js');
+var linedb=require('../storage/line.js')
 
 exports.dbTest=function(){
 

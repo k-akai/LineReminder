@@ -2,6 +2,7 @@ var share = require('../lib/share.js')
 var async = require('async')
 var lineapi = require('../line/lineapi.js')
 
+// imageのコンテンツを取得する関数
 exports.setImage = function (source, message) {
   async.waterfall([
     function (callback) {
@@ -46,12 +47,44 @@ exports.setImage = function (source, message) {
       }
       callback(null)
     }
-  ], function (err, arg1) {
+  ], function (err) {
     if (err) {
       throw err
     }
   })
   return
+}
+
+
+//データがあるかを確認する
+exports.idFind=function(id){
+  var data=null
+  async.waterfall([
+    function (callback) {
+      // console.log('DBの確認')
+      var json = {'id': id}
+      var cursor = share.dbimagedata.find(json)
+      cursor.toArray(function (err, docs) {
+        // toArray用のコールバック関数
+        if (err) {
+          console.error('読み込みエラー')
+          throw (err)
+        }
+        // console.log("db-result-lineimage")
+        // console.log(docs)
+        data=docs
+        callback(null, docs)
+      })
+    }
+  ], function (err, docs) {
+    if (err) {
+      throw err
+    }
+    console.log(data)
+  })
+  console.log("end")
+  return data
+
 }
 /*
 exports.userFind=function(id){
