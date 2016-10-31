@@ -13,12 +13,14 @@ exports.dbTest=function(){
 
 
 //どの処理を実施するか割り当てる
-exports.checkCallback=function(source,message,data){
-  data.id="aaa";
-  data.messages="テストテスト";
-  id=null;
-  if (message.type=="image"){
-	return 2;
+exports.checkCallback = function(source,message,data) {
+  data.id = "aaa";
+  data.messages = "テストテスト";
+  id = null;
+  if (message.type === "image") {
+    // データがあるかをチェック
+　　　　linedb.setImage(source,message)
+    return 3;
   }
   if (source.type=="room"){
     id=source.roomId;

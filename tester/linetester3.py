@@ -11,6 +11,23 @@ if __name__ == '__main__':
     json_data ='''{"events":[{"type":"message","replyToken":"aaaaa","source":{"userId":"yyyyyy","t\
 ype":"user"},"timestamp":1476775063995,"message":{"type":"text","id":"xxxxxx","text":"い"\
 }}]}'''.encode("utf-8")
+    json_data='''{
+    "events": [
+        {
+            "type": "message",
+            "replyToken": "d87cc8abcee3412b9876aadd970ed17c",
+            "source": {
+                "userId": "xxxx3343e9621da816a02152f94058a12",
+                "type": "user"
+            },
+            "timestamp": 1477658387396,
+            "message": {
+                "type": "image",
+                "id": "5123720128629"
+            }
+        }
+    ]
+}'''.encode("utf-8")
     # httpリクエストを準備してPOST
     request = urllib.request.Request(url, data=json_data, method=method, headers=headers)
     with urllib.request.urlopen(request) as response:

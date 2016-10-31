@@ -1,7 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var lineapi = require('../line/lineapi.js')
-var lineu = require('../line/lineutil.js')
+var lineutil = require('../line/lineutil.js')
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -51,7 +51,7 @@ router.post('/', function (req, res) {
     // 各種処理の分岐をする
     // 家計簿botの場合のルールを設定
     var data = {}
-    var brunch = lineu.checkCallback(source, message, data)
+    var brunch = lineutil.checkCallback(source, message, data)
     // messageイベント
     if (brunch === 1) {
       var text = message.text
@@ -60,6 +60,7 @@ router.post('/', function (req, res) {
     } else if (brunch === 2) {
       lineapi.getContent(message.id, 'local/image/' + message.id)
     }
+    // デバッグ用
     res.send(req.body)
   }
 })
