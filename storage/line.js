@@ -57,7 +57,7 @@ exports.setImage = function (source, message) {
 
 
 //データがあるかを確認する
-exports.idFind=function(id){
+exports.idFind=function(id,data){
   var data=null
   async.waterfall([
     function (callback) {
