@@ -39,7 +39,7 @@ router.get('/', function (req, res, next) {
     res.render('reminder.html', { 
 	id:id,
 	host:process.env.HOSTNAME+"/dbsocket",
-        tabledata:[]t,
+        tabledata:[],
     });   
   })
 })
