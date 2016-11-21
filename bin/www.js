@@ -12,7 +12,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.LOCALPORT || '3000');
 app.set('port', port);
 
 /**
@@ -94,7 +94,7 @@ function onListening() {
 //socketをopen
 
 var io = require('socket.io')(server);
-var webPort = process.env.PORT || 3000;
+var webPort = process.env.LOCALPORT || 3000;
 server.listen(webPort);
 
 
