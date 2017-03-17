@@ -13,6 +13,7 @@ var routes = require('./routes/index');
 var linebot= require('./routes/linebot');
 var lineImage= require('./routes/image');
 var form1=require('./routes/form1');
+var form1reg=require('./routes/form1reg')
 var app = express();
 
 
@@ -40,7 +41,8 @@ app.use('/', routes);
 //app.use('/socket',sockettest);
 app.use('/linebot',linebot);
 app.use('/lineImage',lineImage);
-app.use('/regform',form1);
+app.use('/form1',form1);
+app.use('/form1reg',form1reg);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

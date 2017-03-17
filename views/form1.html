@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta http-equiv="content-type"
+        content="text/html; charset=UTF-8">
+    <title><%=title %></title>
+    <style>
+    body { font-size:12pt; color:#006666; }
+    h1 { font-size:18pt; background-color:#AAFFFF; }
+    pre { background-color:#EEEEEE; }
+    </style>
+</head>
+
+
+<body>
+    <header>
+        <h1 id="h1"><%=title %></h1>
+    </header>
+    <p>登録画面</p>
+
+    <form action="form1reg" method="get">
+	<p>子供の名前：<input type="text" name="name1" value="<%-name1 %>" size="10" />
+	データの保存
+	    <input type="radio" name="name1check" value="yes" checked="checked" /> する
+	    <input type="radio" name="name1check" value="no" /> しない
+	</p>
+	<p><input type="submit" name="submit" value="送信" /></p>
+	</form>
+</body>
+
+</html>
