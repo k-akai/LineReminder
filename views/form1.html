@@ -19,11 +19,23 @@
     <p>登録画面</p>
 
     <form action="form1reg" method="get">
-	<p>子供の名前：<input type="text" name="name1" value="<%-name1 %>" size="10" />
+	<p>名前（ニックネーム）：<input type="text" name="user" value="<%-user %>" size="10" />
 	データの保存
-	    <input type="radio" name="name1check" value="yes" checked="checked" /> する
-	    <input type="radio" name="name1check" value="no" /> しない
+	    <input type="radio" name="user_check" value="yes" checked="checked" /> する
+	    <input type="radio" name="user_check" value="no" disabled="disabled" /> しない（不可）
 	</p>
+	<p>住所（町名）：<input type="text" name="location" value="<%-location %>" size="10" />
+	    データの保存
+	    <input type="radio" name="location_check" value="yes" checked="checked" /> する
+	    <input type="radio" name="location_check" value="no" /> しない
+	</p>
+        <p>学区(小学校)<input type="text" name="school" value="<%-school %>" size="10" />
+	    データの保存
+	    <input type="radio" name="school_check" value="yes" checked="checked" /> する
+	    <input type="radio" name="school_check" value="no" /> しない
+	</p>
+
+	<input type="hidden" name="id" value="<%-id %>">
 	<p><input type="submit" name="submit" value="送信" /></p>
 	</form>
 </body>
