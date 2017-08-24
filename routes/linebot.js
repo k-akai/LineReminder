@@ -16,16 +16,16 @@ function output (jsonS) {
 
 /* post */
 router.post('/', function (req, res) {
-  output(req.body)
-  // eventのデータを取得
-  var json = req.body.events
-  for (var i in json) {
-    // イベントが複数発生している場合
-    if (i > 0) {
-      console.log('複数のイベントをもらっているので処理が不明')
-      console.log(json)
-      return
-    }
+    output(req.body)
+    // eventのデータを取得
+    var json = req.body.events
+    for (var i in json) {
+	// イベントが複数発生している場合
+	if (i > 0) {
+	    console.log('複数のイベントをもらっているので処理が不明')
+	    console.log(json)
+	    return
+	}
 
     // 各種データの取得
     var type = json[i].type
@@ -48,6 +48,10 @@ router.post('/', function (req, res) {
       console.log(json)
       break
     }
+	lineapi.replyMessage(repToken, '解析中')
+      res.send("あ")
+    return
+    /*
     // 各種処理の分岐をする
     // 家計簿botの場合のルールを設定
     var data = {}
@@ -62,6 +66,7 @@ router.post('/', function (req, res) {
     }
     // デバッグ用
     res.send(req.body)
+    */
   }
 })
 

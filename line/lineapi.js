@@ -64,11 +64,11 @@ exports.pushMessage = function(toS, text){
 
 
 exports.replyMessage = function(replyToken, text){
-　　var url = 'https://api.line.me/v2/bot/message/reply'
-  var headers = {
-  　　'Content-Type' : 'application/json   charset=UTF-8',
- 　　 'Authorization':'Bearer '+ channelAccessToken
-  }
+    var url = 'https://api.line.me/v2/bot/message/reply'
+    var headers = {
+	'Content-Type' : 'application/json   charset=UTF-8',
+	 'Authorization':'Bearer '+ channelAccessToken
+    }
 
   var message={
     'type': 'text',
